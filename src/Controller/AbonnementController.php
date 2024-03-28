@@ -30,17 +30,11 @@ class AbonnementController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        if ($abonnement->getPrix() <= 0) {
-            $form->get('prix')->addError(new FormError('Le prix doit être supérieur à zéro.'));
-        }
+        // Proceed with saving
+        $entityManager->persist($abonnement);
+        $entityManager->flush();
 
-        if ($form->getErrors()->count() === 0) {
-            // Si le formulaire est valide après vérification du prix, procédez à la sauvegarde
-            $entityManager->persist($abonnement);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_abonnement_index', [], Response::HTTP_SEE_OTHER);
-        }
+        return $this->redirectToRoute('app_abonnement_index', [], Response::HTTP_SEE_OTHER);
     }
 
     return $this->render('abonnement/new.html.twig', [
