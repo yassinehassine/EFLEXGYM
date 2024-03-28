@@ -1,0 +1,11 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Nouveau bilan financier{% endblock %}
+
+{% block body %}
+    <h1>Ajouter un nouveau bilan financier</h1>
+
+    {{ include('bilan_financier/_form.html.twig') }}
+
+    <a href="{{ path('app_bilan_financier_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,44 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+app_bilan_financier_index:
+    path: /bilan_financier
+    controller: App\Controller\BilanFinancierController::index
+    methods: GET
+
+app_bilan_financier_show:
+    path: /bilan_financier/{id}
+    controller: App\Controller\BilanFinancierController::show
+    methods: GET
+
+app_bilan_financier_edit:
+    path: /bilan_financier/{id}/edit
+    controller: App\Controller\BilanFinancierController::edit
+    methods: ['GET', 'POST']
+
+app_bilan_financier_delete:
+    path: /bilan_financier/{id}
+    controller: App\Controller\BilanFinancierController::delete
+    methods: POST
+# config/routes.yaml
+
+# Correction des routes pour les actions de récupération
+app_bilan_financier_get_revenus_abonnements:
+    path: /bilan_financier/get-revenus-abonnements/{id}
+    controller: App\Controller\BilanFinancierController::getRevenusAbonnements
+    methods: ['GET']
+
+app_bilan_financier_get_revenus_produits:
+    path: /bilan_financier/get-revenus-produits/{id}
+    controller: App\Controller\BilanFinancierController::getRevenusProduits
+    methods: ['GET']
+
+app_bilan_financier_get_salaires_coachs:
+    path: /bilan_financier/get-salaires-coachs/{id}
+    controller: App\Controller\BilanFinancierController::getSalairesCoachs
+    methods: ['GET']
+
+app_bilan_financier_calculer_profit:
+    path: /bilan_financier/calculer-profit/{id}
+    controller: App\Controller\BilanFinancierController::calculerProfit
+    methods: ['GET']
