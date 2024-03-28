@@ -30,14 +30,23 @@ class BilanFinancierController extends AbstractController
     }
 
     #[Route('/', name: 'app_bilan_financier_index', methods: ['GET'])]
-    public function index(BilanFinancierRepository $bilanFinancierRepository): Response
+    public function index(Request $request, BilanFinancierRepository $bilanFinancierRepository): Response
     {
-        // Récupérer tous les bilans financiers triés par mois de début
-        $bilan_financiers = $bilanFinancierRepository->findBy([], ['dateDebut' => 'ASC']);
-        
-        return $this->render('bilan_financier/index.html.twig', [
-            'bilan_financiers' => $bilan_financiers,
-        ]);
+        $sortField = $request->query->get('sort', 'dateDebut'); // Default sort field
+    $sortDirection = $request->query->get('direction', 'ASC'); // Default sort direction
+
+    // Check if the sort field is valid
+    $validSortFields = ['profit', 'revenusAbonnements', 'revenusProduits'];
+    if (!in_array($sortField, $validSortFields)) {
+        throw new \InvalidArgumentException('Invalid sort field.');
+    }
+
+    // Get all financial statements sorted according to the sort parameters
+    $bilan_financiers = $bilanFinancierRepository->findBy([], [$sortField => $sortDirection]);
+
+    return $this->render('bilan_financier/index.html.twig', [
+        'bilan_financiers' => $bilan_financiers,
+    ]);
     }
     
     

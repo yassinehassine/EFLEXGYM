@@ -3,7 +3,11 @@
 
 {% block body %}
     <h1>Liste des bilans financiers </h1>
-
+     <div>
+        <a href="{{ path('app_bilan_financier_index', {'sort': 'profit', 'direction': 'desc'}) }}">Trier par Profit (Desc)</a>
+        <a href="{{ path('app_bilan_financier_index', {'sort': 'revenusAbonnements', 'direction': 'desc'}) }}">Trier par Revenus Abonnements (Desc)</a>
+        <a href="{{ path('app_bilan_financier_index', {'sort': 'revenusProduits', 'direction': 'desc'}) }}">Trier par Revenus Produits (Desc)</a>
+    </div>
     <table class="table">
         <thead>
             <tr>
