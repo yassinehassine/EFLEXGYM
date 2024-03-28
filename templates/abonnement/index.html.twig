@@ -4,6 +4,17 @@
 
 {% block body %}
     <h1>Abonnement index</h1>
+      <div>
+        <form method="get" action="{{ path('app_abonnement_index') }}">
+            <label for="type_filter">Filtrer par type :</label>
+            <select name="type_filter" id="type_filter">
+                <option value="">Tous</option>
+                <option value="annuel">Annuel</option>
+                <option value="mensuel">Mensuel</option>
+            </select>
+            <button type="submit">Filtrer</button>
+        </form>
+    </div>
 
     <table class="table">
         <thead>

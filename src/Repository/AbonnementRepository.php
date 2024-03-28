@@ -34,6 +34,16 @@ class AbonnementRepository extends ServiceEntityRepository
 
     return $result ? (float) $result : null;
 }
+public function findByType($type)
+{
+    return $this->createQueryBuilder('a')
+        ->andWhere('a.type = :val')
+        ->setParameter('val', $type)
+        ->orderBy('a.id', 'ASC')
+        ->getQuery()
+        ->getResult()
+    ;
+}
 
 
 }
