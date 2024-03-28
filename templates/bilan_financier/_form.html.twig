@@ -1,6 +1,37 @@
-
-
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.dateDebut) }}
+    {{ form_row(form.dateFin) }}
+    {{ form_row(form.salairesCoachs) }}
+   
+    <div>
+        {{ form_label(form.prixLocation, 'Prix location') }}
+        {{ form_widget(form.prixLocation) }}
+    </div>
+    {{ form_row(form.revenusAbonnements) }}
+    {{ form_row(form.revenusProduits) }}
+  
+     <div>
+        {{ form_label(form.depenses, 'Depenses') }}
+        {{ form_widget(form.depenses) }}
+    </div>
+    {{ form_row(form.profit) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+{% if form_errors(form.prixLocation) %}
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+     
+            Le montant doit être un nombre positif et supérieur à zéro.
+ 
+    </div>
+{% endif %}
+
+{% if form_errors(form.depenses) %}
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+     
+            Le montant doit être un nombre positif et supérieur à zéro.
+       
+    </div>
+{% endif %}

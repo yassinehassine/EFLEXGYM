@@ -8,4 +8,33 @@
     {{ include('bilan_financier/_form.html.twig') }}
 
     <a href="{{ path('app_bilan_financier_index') }}">back to list</a>
+    <style>
+    /* Style the alert box */
+    .alert {
+        padding: 20px;
+        background-color: #f44336; /* Red */
+        color: white;
+        margin-bottom: 15px;
+        border-radius: 5px;
+    }
+
+    /* Style the close button */
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    /* When hovering over the close button */
+    .closebtn:hover {
+        color: black;
+    }
+</style>
+
+
 {% endblock %}

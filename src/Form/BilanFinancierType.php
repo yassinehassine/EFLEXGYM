@@ -6,6 +6,10 @@ use App\Entity\BilanFinancier;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Positive;
+
 
 class BilanFinancierType extends AbstractType
 {
@@ -15,10 +19,32 @@ class BilanFinancierType extends AbstractType
             ->add('dateDebut')
             ->add('dateFin')
             ->add('salairesCoachs')
-            ->add('prixLocation')
+            ->add('prixLocation', null, [
+                'constraints' => [
+                    new NotBlank(),
+                    new Positive([
+                      
+                    ]),
+                    new GreaterThan([
+                        'value' => 0,
+                       
+                    ]),
+                ],
+            ])
             ->add('revenusAbonnements')
             ->add('revenusProduits')
-            ->add('depenses')
+            ->add('depenses', null, [
+                'constraints' => [
+                    new NotBlank(),
+                    new Positive([
+                      
+                    ]),
+                    new GreaterThan([
+                        'value' => 0,
+                       
+                    ]),
+                ],
+            ])
             ->add('profit')
         ;
     }

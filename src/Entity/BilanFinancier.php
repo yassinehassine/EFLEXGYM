@@ -22,9 +22,12 @@ class BilanFinancier
     private ?\DateTimeInterface $dateFin=null;
 
     #[ORM\Column]
+
     private ?float $salairesCoachs=null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero]
     private ?float $prixLocation=null;
 
     #[ORM\Column]
@@ -34,6 +37,8 @@ class BilanFinancier
     private ?float $revenusProduits=null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\PositiveOrZero]
     private ?float $depenses=null;
 
     #[ORM\Column]
