@@ -23,7 +23,7 @@ class Abonnement
 
     #[ORM\Column]
     #[Assert\NotBlank]
-#[Assert\PositiveOrZero]
+    #[Assert\PositiveOrZero]
     private ?float $prix=null;
 
     #[ORM\Column(type:"datetime")]
