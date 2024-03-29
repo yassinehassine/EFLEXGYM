@@ -1,9 +1,9 @@
 {% extends 'back.html.twig' %}
 
-{% block title %}Abonnement index{% endblock %}
+{% block title %}Liste des Abonnements{% endblock %}
 
 {% block body %}
-    <h1>Abonnement index</h1>
+    <h1>Liste des Abonnements</h1>
       <div>
         <form method="get" action="{{ path('app_abonnement_index') }}">
             <label for="type_filter">Filtrer par type :</label>
@@ -41,13 +41,13 @@
         <td>{{ abonnement.dateDebut ? abonnement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
         <td>{{ abonnement.dateFin ? abonnement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
         <td>{{ abonnement.etat }}</td>
-        <td>{{ abonnement.idAdherent.id }}</td> {# Accessing adherent's name #}
+        <td>{{ abonnement.idAdherent.id }}</td> 
 
-        <td>{{ abonnement.idBilanFinancier.id }}</td> {# Accessing financial statement ID #}
+        <td>{{ abonnement.idBilanFinancier.id }}</td> 
         
         <td>
-            <a href="{{ path('app_abonnement_show', {'id': abonnement.id}) }}">show</a>
-            <a href="{{ path('app_abonnement_edit', {'id': abonnement.id}) }}">edit</a>
+            <a href="{{ path('app_abonnement_show', {'id': abonnement.id}) }}">Détails</a>
+            <a href="{{ path('app_abonnement_edit', {'id': abonnement.id}) }}">Modifier</a>
         </td>
     </tr>
 {% else %}
@@ -59,5 +59,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_abonnement_new') }}">Create new</a>
+    <a href="{{ path('app_abonnement_new') }}">Ajouter un abonnement</a>
 {% endblock %}

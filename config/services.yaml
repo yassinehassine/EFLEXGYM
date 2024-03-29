@@ -16,7 +16,10 @@ services:
     App\twig\MonthTranslatorExtension:
         tags: [twig.extension]
 
-
+    App\Controller\BilanFinancierController:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+            $logger: '@logger'
     # Define repository services for autowiring
     App\Repository\:
         resource: '../src/Repository'

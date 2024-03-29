@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+
+use Psr\Log\LoggerInterface;
 use App\Entity\BilanFinancier;
 use App\Form\BilanFinancierType;
 use App\Repository\BilanFinancierRepository;
@@ -20,11 +22,14 @@ use Doctrine\Persistence\ManagerRegistry;
 class BilanFinancierController extends AbstractController
 {
     private $entityManager;
+    private $logger;
 
     
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
+        
         // Define the array of months
        
     }
@@ -32,21 +37,21 @@ class BilanFinancierController extends AbstractController
     #[Route('/', name: 'app_bilan_financier_index', methods: ['GET'])]
     public function index(Request $request, BilanFinancierRepository $bilanFinancierRepository): Response
     {
-        $sortField = $request->query->get('sort', 'dateDebut'); // Default sort field
-    $sortDirection = $request->query->get('direction', 'ASC'); // Default sort direction
+        $sortField = $request->query->get('sort_field', 'dateDebut'); // Default sort field
+        $sortDirection = $request->query->get('sort_direction', 'ASC'); // Default sort direction
 
-    // Check if the sort field is valid
-    $validSortFields = ['profit', 'revenusAbonnements', 'revenusProduits'];
-    if (!in_array($sortField, $validSortFields)) {
-        throw new \InvalidArgumentException('Invalid sort field.');
-    }
+        // Validate the sort field
+        $validSortFields = ['dateDebut', 'revenusAbonnements', 'revenusProduits', 'profit'];
+        if (!in_array($sortField, $validSortFields)) {
+            throw new \InvalidArgumentException('Invalid sort field.');
+        }
 
-    // Get all financial statements sorted according to the sort parameters
-    $bilan_financiers = $bilanFinancierRepository->findBy([], [$sortField => $sortDirection]);
+        // Get all financial statements sorted according to the sort parameters
+        $bilan_financiers = $bilanFinancierRepository->findBy([], [$sortField => $sortDirection]);
 
-    return $this->render('bilan_financier/index.html.twig', [
-        'bilan_financiers' => $bilan_financiers,
-    ]);
+        return $this->render('bilan_financier/index.html.twig', [
+            'bilan_financiers' => $bilan_financiers,
+        ]);
     }
     
     

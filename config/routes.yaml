@@ -6,6 +6,11 @@ app_bilan_financier_index:
     controller: App\Controller\BilanFinancierController::index
     methods: GET
 
+app_abonnement_index:
+    path: /abonnement
+    controller: App\Controller\AbonnementController::index
+    methods: GET
+
 app_bilan_financier_show:
     path: /bilan_financier/{id}
     controller: App\Controller\BilanFinancierController::show
