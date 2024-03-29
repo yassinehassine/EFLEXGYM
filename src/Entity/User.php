@@ -14,12 +14,9 @@ class User
     #[ORM\Column]
     private ?int $id= null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nom", type="string", length=255, nullable=false)
-     */
-    private $nom;
+   
+    #[ORM\Column(length:150)]
+    private ?string $nom=null;
 
     /**
      * @var string

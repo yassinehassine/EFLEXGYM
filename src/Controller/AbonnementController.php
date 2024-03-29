@@ -15,13 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class AbonnementController extends AbstractController
 {
     #[Route('/', name: 'app_abonnement_index', methods: ['GET'])]
-    public function index(Request $request ,AbonnementRepository $abonnementRepository): Response
+    public function index(Request $request, AbonnementRepository $abonnementRepository): Response
     {
         $typeFilter = $request->query->get('type_filter');
-        $abonnements = $typeFilter ? $abonnementRepository->findBy(['type' => $typeFilter]) : $abonnementRepository->findAll();
+        $nomAdherent = $request->query->get('nom_adherent');
+    
+        if ($nomAdherent) {
+            // Effectuer une recherche par nom d'adhérent
+            $abonnements = $abonnementRepository->findByNomAdherent($nomAdherent);
+        } else {
+            // Si aucun nom n'est fourni, récupérer tous les abonnements
+            $abonnements = $typeFilter ? $abonnementRepository->findBy(['type' => $typeFilter]) : $abonnementRepository->findAll();
+        }
     
         return $this->render('abonnement/index.html.twig', [
-            'abonnements' => $abonnements, // Utilisez $abonnements au lieu de $abonnementRepository->findAll()
+            'abonnements' => $abonnements,
         ]);
     }
     

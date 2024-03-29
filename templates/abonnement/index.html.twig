@@ -4,7 +4,8 @@
 
 {% block body %}
     <h1>Liste des Abonnements</h1>
-      <div>
+     <div>
+        <!-- Formulaire pour le filtre par type -->
         <form method="get" action="{{ path('app_abonnement_index') }}">
             <label for="type_filter">Filtrer par type :</label>
             <select name="type_filter" id="type_filter">
@@ -13,7 +14,18 @@
                 <option value="mensuel">Mensuel</option>
             </select>
             <button type="submit">Filtrer</button>
+             <a href="{{ path('app_abonnement_index') }}" class="btn btn-primary">Actualiser</a>
         </form>
+    </div>
+
+    <div>
+        <!-- Formulaire pour la recherche par nom -->
+        <form method="get" action="{{ path('app_abonnement_index') }}">
+    <label for="nom_adherent">Rechercher par nom :</label>
+    <input type="text" id="nom_adherent" name="nom_adherent">
+    <button type="submit">Rechercher</button>
+</form>
+
     </div>
 
     <table class="table">
@@ -41,7 +53,7 @@
         <td>{{ abonnement.dateDebut ? abonnement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
         <td>{{ abonnement.dateFin ? abonnement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
         <td>{{ abonnement.etat }}</td>
-        <td>{{ abonnement.idAdherent.id }}</td> 
+        <td>{{ abonnement.idAdherent.nom }}</td> 
 
         <td>{{ abonnement.idBilanFinancier.id }}</td> 
         
