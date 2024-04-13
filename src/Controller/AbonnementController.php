@@ -19,17 +19,24 @@ class AbonnementController extends AbstractController
     {
         $typeFilter = $request->query->get('type_filter');
         $nomAdherent = $request->query->get('nom_adherent');
+        $perPage = 10;
+        $currentPage = $request->query->getInt('page', 1);  // Default to 1 if 'page' param is not specified
     
         if ($nomAdherent) {
-            // Effectuer une recherche par nom d'adhérent
             $abonnements = $abonnementRepository->findByNomAdherent($nomAdherent);
         } else {
-            // Si aucun nom n'est fourni, récupérer tous les abonnements
             $abonnements = $typeFilter ? $abonnementRepository->findBy(['type' => $typeFilter]) : $abonnementRepository->findAll();
         }
     
+        $totalItems = count($abonnements);
+        $totalPages = ceil($totalItems / $perPage);
+        $offset = ($currentPage - 1) * $perPage;
+        $abonnementsToShow = array_slice($abonnements, $offset, $perPage);
+    
         return $this->render('abonnement/index.html.twig', [
-            'abonnements' => $abonnements,
+            'abonnements' => $abonnementsToShow,
+            'total_pages' => $totalPages,
+            'current_page' => $currentPage
         ]);
     }
     

@@ -51,8 +51,8 @@
                 <td>{{ bilan_financier.depenses }}</td>
                 <td>{{ bilan_financier.profit }}</td>
                 <td>
-                    <a href="{{ path('app_bilan_financier_show', {'id': bilan_financier.id}) }}">Détails</a>
-                    <a href="{{ path('app_bilan_financier_edit', {'id': bilan_financier.id}) }}">Modifier</a>
+                    <a href="{{ path('app_bilan_financier_show', {'id': bilan_financier.id}) }}"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('app_bilan_financier_delete', {'id': bilan_financier.id}) }}"class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
                 </td>
             </tr>
         {% else %}
@@ -62,6 +62,25 @@
         {% endfor %}
         </tbody>
     </table>
+    <style>
+    .pagination a {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+}
 
-    <a href="{{ path('app_bilan_financier_new') }}">Créer un nouveau bilan financier</a>
+.pagination a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+    </style>
+
+   <a href="{{ path('app_bilan_financier_new') }}" class="btn btn-success"><i class="fas fa-plus"></i> Créer un nouveau bilan financier</a>
 {% endblock %}

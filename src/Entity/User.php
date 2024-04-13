@@ -32,12 +32,8 @@ class User
      */
     private $motDePasse;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
-     */
-    private $email;
+    #[ORM\Column(length:150)]
+    private ?string $email=null;
 
     /**
      * @var \DateTime

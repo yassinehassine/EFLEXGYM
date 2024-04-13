@@ -10,6 +10,9 @@ app_abonnement_index:
     path: /abonnement
     controller: App\Controller\AbonnementController::index
     methods: GET
+send_email:
+    path: '/send-email'
+    controller: 'App\Controller\EmailController::sendEmail'
 
 app_bilan_financier_show:
     path: /bilan_financier/{id}

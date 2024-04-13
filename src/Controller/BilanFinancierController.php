@@ -24,7 +24,7 @@ class BilanFinancierController extends AbstractController
     private $entityManager;
     private $logger;
 
-    
+    private $mois = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
         $this->entityManager = $entityManager;

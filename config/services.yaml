@@ -12,6 +12,13 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+   
+    League\OAuth2\Client\Provider\Google:
+        arguments:
+            $options:
+                clientId: '1050520473007-gtb12takp27cm6mrrltu9ffk8al9dv2l.apps.googleusercontent.com'
+                clientSecret: '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'
+                redirectUri: 'http://127.0.0.1:8000/abonnement'
 
     App\twig\MonthTranslatorExtension:
         tags: [twig.extension]
