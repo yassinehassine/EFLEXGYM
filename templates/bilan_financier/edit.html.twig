@@ -1,10 +1,17 @@
 {% extends 'back.html.twig' %}
-{# edit.html.twig #}
 
 {% block title %}Modifier un bilan financier{% endblock %}
 
 {% block body %}
     <h1>Modifier un bilan financier</h1>
+    {{ form_start(form.depenses) }}
+    <div>
+        {{ form_label(form.depenses, 'Dépenses:') }}
+        {{ form_widget(form.depenses) }}
+        {{ form_errors(form.depenses) }}
+        <button type="submit" class="btn btn-primary">Enregistrer</button><br><br>
+    </div>
+    {{ form_end(form.depenses) }}
 
     <button onclick="obtenirRevenusAbonnements()">Obtenir Revenus Abonnements</button>
     <span id="revenusAbonnementsSpan"></span><br><br>
@@ -17,7 +24,6 @@
 
     <button onclick="calculerProfit()">Calculer Profit</button>
     <span id="profitSpan"></span><br><br>
-
     <!-- Lien pour revenir à la liste -->
     <a href="{{ path('app_bilan_financier_index') }}">Retour à la liste</a>
 

@@ -88,22 +88,24 @@ class BilanFinancierController extends AbstractController
     
 
     #[Route('/{id}/edit', name: 'app_bilan_financier_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, BilanFinancier $bilanFinancier): Response
-    {
-        $form = $this->createForm(BilanFinancierType::class, $bilanFinancier);
-        $form->handleRequest($request);
+public function edit(Request $request, BilanFinancier $bilanFinancier): Response
+{
+    $form = $this->createForm(BilanFinancierType::class, $bilanFinancier);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Save changes including the new expenses
+        $this->entityManager->flush();
 
-            return $this->redirectToRoute('app_bilan_financier_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('bilan_financier/edit.html.twig', [
-            'bilan_financier' => $bilanFinancier,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('app_bilan_financier_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    return $this->renderForm('bilan_financier/edit.html.twig', [
+        'bilan_financier' => $bilanFinancier,
+        'form' => $form,
+    ]);
+}
+
 
     #[Route('/{id}', name: 'app_bilan_financier_delete', methods: ['POST'])]
     public function delete(Request $request, BilanFinancier $bilanFinancier): Response
