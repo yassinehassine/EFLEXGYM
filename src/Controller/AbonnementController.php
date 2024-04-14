@@ -100,26 +100,20 @@ class AbonnementController extends AbstractController
         return $this->redirectToRoute('app_abonnement_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/monA', name: 'app_abonnement_monA', methods: ['GET'])]
-public function monAbonnement(): Response
-{
-    // Vérifier si l'utilisateur est connecté et a le rôle 'adherent'
-    $this->denyAccessUnlessGranted('ROLE_ADHERENT');
-
-    // Récupérer l'utilisateur connecté
-    $user = $this->getUser();
-
-    // Trouver l'abonnement associé à cet utilisateur
-    $abonnement = $this->getDoctrine()->getRepository(Abonnement::class)->findOneBy(['id_adherent' => $user->getId()]);
-
-    if (!$abonnement) {
-        throw $this->createNotFoundException('Aucun abonnement trouvé pour cet utilisateur.');
+    #[Route('/monA/{user_id}', name: 'app_abonnement_monA', methods: ['GET'])]
+    public function monA(int $user_id, AbonnementRepository $abonnementRepository): Response
+    {
+        // Trouver l'abonnement associé à cet utilisateur via user_id
+        $abonnement = $abonnementRepository->findOneBy(['id_adherent' => $user_id]);
+    
+        if (!$abonnement) {
+            throw $this->createNotFoundException('Aucun abonnement trouvé pour cet utilisateur.');
+        }
+    
+        // Afficher la vue avec les détails de l'abonnement
+        return $this->render('abonnement/monAbonnement.html.twig', [
+            'abonnement' => $abonnement,
+        ]);
     }
-
-    // Afficher la vue avec les détails de l'abonnement
-    return $this->render('abonnement/monAbonnement.html.twig', [
-        'abonnement' => $abonnement,
-    ]);
-}
 
 }
