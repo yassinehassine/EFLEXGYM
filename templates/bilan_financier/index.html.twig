@@ -1,3 +1,4 @@
+
 {% extends 'back.html.twig' %}
 {% block title %}Liste des bilans financiers {% endblock %}
 
@@ -50,9 +51,9 @@
                 <td>{{ bilan_financier.revenusProduits }}</td>
                 <td>{{ bilan_financier.depenses }}</td>
                 <td>{{ bilan_financier.profit }}</td>
-                <td>
-                    <a href="{{ path('app_bilan_financier_show', {'id': bilan_financier.id}) }}"><i class="fas fa-eye"></i></a>
-                    <a href="{{ path('app_bilan_financier_delete', {'id': bilan_financier.id}) }}"class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                <td >
+                   <td> <a href="{{ path('app_bilan_financier_show', {'id': bilan_financier.id}) }}"><i class="fas fa-eye"></i></a></td>
+                   <td>  {{ include('bilan_financier/_delete_form.html.twig', {'id': bilan_financier.id}) }}</td>
                 </td>
             </tr>
         {% else %}

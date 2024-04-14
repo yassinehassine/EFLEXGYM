@@ -37,7 +37,7 @@ class BilanFinancierController extends AbstractController
     public function index(Request $request, BilanFinancierRepository $bilanFinancierRepository): Response
     {
         $sortField = $request->query->get('sort_field', 'dateDebut'); 
-        $sortDirection = $request->query->get('sort_direction', 'ASC'); 
+        $sortDirection = $request->query->get('sort_direction', 'ASC'); // Default sort direction
 
         // Validate the sort field
         $validSortFields = ['dateDebut', 'revenusAbonnements', 'revenusProduits', 'profit'];
@@ -106,16 +106,16 @@ public function edit(Request $request, BilanFinancier $bilanFinancier): Response
 }
 
 
-    #[Route('/{id}', name: 'app_bilan_financier_delete', methods: ['POST'])]
-    public function delete(Request $request, BilanFinancier $bilanFinancier): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$bilanFinancier->getId(), $request->request->get('_token'))) {
-            $this->entityManager->remove($bilanFinancier);
-            $this->entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_bilan_financier_index', [], Response::HTTP_SEE_OTHER);
+#[Route('/{id}', name: 'app_bilan_financier_delete', methods: ['POST'])]
+public function delete(Request $request, BilanFinancier $bilanFinancier): Response
+{
+    if ($this->isCsrfTokenValid('delete'.$bilanFinancier->getId(), $request->request->get('_token'))) {
+        $this->entityManager->remove($bilanFinancier);
+        $this->entityManager->flush();
     }
+
+    return $this->redirectToRoute('app_bilan_financier_index', [], Response::HTTP_SEE_OTHER);
+}
 
     #[Route('/get-revenus-abonnements/{id}', name: 'app_bilan_financier_get_revenus_abonnements', methods: ['GET'])]
     public function getRevenusAbonnements(int $id, AbonnementRepository $abonnementRepository): JsonResponse

@@ -5,36 +5,55 @@
 {% block body %}
     <h1>Ajouter un nouveau bilan financier</h1>
 
-    {{ include('bilan_financier/_form.html.twig') }}
+    {{ form_start(form) }}
+        {{ form_row(form.dateDebut) }}
+        {{ form_row(form.dateFin) }}
+        {{ form_row(form.salairesCoachs) }}
+        {{ form_row(form.prixLocation) }}
+        {{ form_row(form.revenusAbonnements) }}
+        {{ form_row(form.revenusProduits) }}
+        {{ form_row(form.depenses) }}
+        {{ form_row(form.profit) }}
+        
+        <button type="submit" class="btn">{{ button_label|default('Sauvegarder') }}</button>
+    {{ form_end(form) }}
+
+    {% if form_errors(form.prixLocation) %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            Le montant doit être un nombre positif et supérieur à zéro.
+        </div>
+    {% endif %}
+
+    {% if form_errors(form.depenses) %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            Le montant doit être un nombre positif et supérieur à zéro.
+        </div>
+    {% endif %}
 
     <a href="{{ path('app_bilan_financier_index') }}">Retour</a>
+
     <style>
-    /* Style the alert box */
-    .alert {
-        padding: 20px;
-        background-color: #f44336; /* Red */
-        color: white;
-        margin-bottom: 15px;
-        border-radius: 5px;
-    }
-
-    /* Style the close button */
-    .closebtn {
-        margin-left: 15px;
-        color: white;
-        font-weight: bold;
-        float: right;
-        font-size: 22px;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    /* When hovering over the close button */
-    .closebtn:hover {
-        color: black;
-    }
-</style>
-
-
+        .alert {
+            padding: 20px;
+            background-color: #f44336; /* Red */
+            color: white;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .closebtn:hover {
+            color: black;
+        }
+    </style>
 {% endblock %}
