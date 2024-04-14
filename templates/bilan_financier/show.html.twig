@@ -9,7 +9,7 @@
         <tbody>
             <tr>
                 <th>Mois</th>
-                <td>{{ mois[bilan_financier.id] }}</td>
+                <td>{{bilan_financier.dateDebut|date('n')|translate_month }}</td>
             </tr>
             <tr>
                 <th>Date de Début</th>

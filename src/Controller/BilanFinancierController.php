@@ -24,21 +24,20 @@ class BilanFinancierController extends AbstractController
     private $entityManager;
     private $logger;
 
-    private $mois = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
     {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
         
-        // Define the array of months
+
        
     }
 
     #[Route('/', name: 'app_bilan_financier_index', methods: ['GET'])]
     public function index(Request $request, BilanFinancierRepository $bilanFinancierRepository): Response
     {
-        $sortField = $request->query->get('sort_field', 'dateDebut'); // Default sort field
-        $sortDirection = $request->query->get('sort_direction', 'ASC'); // Default sort direction
+        $sortField = $request->query->get('sort_field', 'dateDebut'); 
+        $sortDirection = $request->query->get('sort_direction', 'ASC'); 
 
         // Validate the sort field
         $validSortFields = ['dateDebut', 'revenusAbonnements', 'revenusProduits', 'profit'];
@@ -60,7 +59,7 @@ class BilanFinancierController extends AbstractController
     {
         return $this->render('bilan_financier/show.html.twig', [
             'bilan_financier' => $bilanFinancier,
-            'mois' => $this->mois, // Use the months array here
+ 
         ]);
     }
 

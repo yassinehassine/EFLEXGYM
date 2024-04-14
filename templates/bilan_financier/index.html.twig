@@ -41,7 +41,7 @@
         <tbody>
         {% for bilan_financier in bilan_financiers %}
             <tr>
-               <td>{{ bilan_financier.dateDebut|date('n')|translate_month }}</td>
+               <td>{{ bilan_financier.dateDebut|date('n')|translate_month  }}</td>
                 <td>{{ bilan_financier.dateDebut ? bilan_financier.dateDebut|date('Y-m-d') : '' }}</td>
                 <td>{{ bilan_financier.dateFin ? bilan_financier.dateFin|date('Y-m-d') : '' }}</td>
                 <td>{{ bilan_financier.salairesCoachs }}</td>

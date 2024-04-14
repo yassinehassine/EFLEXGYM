@@ -4,14 +4,7 @@
 
 {% block body %}
     <h1>Modifier un bilan financier</h1>
-    {{ form_start(form.depenses) }}
-    <div>
-        {{ form_label(form.depenses, 'Dépenses:') }}
-        {{ form_widget(form.depenses) }}
-        {{ form_errors(form.depenses) }}
-        <button type="submit" class="btn btn-primary">Enregistrer</button><br><br>
-    </div>
-    {{ form_end(form.depenses) }}
+  
 
     <button onclick="obtenirRevenusAbonnements()">Obtenir Revenus Abonnements</button>
     <span id="revenusAbonnementsSpan"></span><br><br>
@@ -93,6 +86,8 @@
                 console.error('Erreur lors du calcul du profit:', error);
             });
     }
+
+    
 </script>
 <style>
     /* Style the alert box */
