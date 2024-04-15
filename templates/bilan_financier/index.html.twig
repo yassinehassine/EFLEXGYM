@@ -52,8 +52,8 @@
                 <td>{{ bilan_financier.depenses }}</td>
                 <td>{{ bilan_financier.profit }}</td>
                 <td >
-                   <td> <a href="{{ path('app_bilan_financier_show', {'id': bilan_financier.id}) }}"><i class="fas fa-eye"></i></a></td>
-                   <td>  {{ include('bilan_financier/_delete_form.html.twig', {'id': bilan_financier.id}) }}</td>
+                   <a href="{{ path('app_bilan_financier_show', {'id': bilan_financier.id}) }}"><i class="fas fa-eye"></i></a>
+                    {{ include('bilan_financier/_delete_form.html.twig', {'id': bilan_financier.id}) }}
                 </td>
             </tr>
         {% else %}

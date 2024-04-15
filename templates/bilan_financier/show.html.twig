@@ -46,9 +46,13 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_bilan_financier_index') }}">Retour à la liste des Bilans Financiers</a>
-
-    <a href="{{ path('app_bilan_financier_edit', {'id': bilan_financier.id}) }}">Éditer</a>
-
-    {{ include('bilan_financier/_delete_form.html.twig') }}
+     <div class="btn-group" role="group" aria-label="Action Buttons">
+        <a href="{{ path('app_bilan_financier_index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour
+        </a>
+        <a href="{{ path('app_bilan_financier_edit', {'id': bilan_financier.id}) }}" class="btn btn-primary">
+            <i class="fas fa-pencil-alt"></i> Éditer
+        </a>
+        {{ include('bilan_financier/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

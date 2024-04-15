@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints\Positive;
 use App\Entity\User; 
 use App\Entity\BilanFinancier; 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+
 
 class AbonnementType extends AbstractType
 {
@@ -39,8 +41,24 @@ class AbonnementType extends AbstractType
                 ],
             ])
             
-            ->add('dateDebut')
-            ->add('dateFin')
+            ->add('dateDebut', DateTimeType::class, [
+                'widget' => 'single_text', 
+                'constraints' => [
+                    new GreaterThan([
+                        'value' => 'today', 
+                        'message' => 'La date de début doit être future à aujourd\'hui.',
+                    ]),
+                ],
+            ])
+            ->add('dateFin', DateTimeType::class, [
+                'widget' => 'single_text',
+                'constraints' => [
+                    new GreaterThan([
+                        'propertyPath' => 'parent.all[dateDebut].data',
+                        'message' => 'La date de fin doit être postérieure à la date de début.'
+                    ]),
+                ],
+            ])
             ->add('etat', ChoiceType::class, [
                 'choices' => [
                     'Actif' => 'actif',
