@@ -10,6 +10,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+
 
 class PlanningType extends AbstractType
 {
@@ -34,6 +37,10 @@ class PlanningType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'La date ne peut pas être vide.',
+                    ]),
+                    new GreaterThan([
+                        'value' => new \DateTime(), // Today's date
+                        'message' => 'La date de début doit être future à aujourd\'hui.',
                     ]),
                 ],
             ])

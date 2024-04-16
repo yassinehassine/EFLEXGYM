@@ -41,14 +41,20 @@
                 dateField.focus();
                 return false;
             }
-
-            var heureField = document.getElementById('{{ form.heure.vars.id }}');
-            var heureValue = heureField.value.trim();
-            if (heureValue === '') {
-                alert('L\'heure ne peut pas être vide.');
-                heureField.focus();
+              var today = new Date().toISOString().split('T')[0];
+            if (dateValue < today) {
+                alert('La date doit être égale ou postérieure à aujourd\'hui.');
+                dateField.focus();
                 return false;
             }
+
+            var today = new Date().toISOString().split('T')[0];
+            if (dateValue < today) {
+                 alert('La date doit être égale ou postérieure à aujourd\'hui.');
+                 dateField.focus();
+                  return false;
+                  }
+
 
             // Additional validation for the cour and coach fields if needed
 

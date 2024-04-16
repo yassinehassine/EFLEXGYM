@@ -47,7 +47,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         $entityManager->flush();
 
         // Redirect to the reservation index page after successful submission
-        return $this->redirectToRoute('app_reservation_index');
+        return $this->redirectToRoute('app_calendarplanning');
     }
 
     // Render the reservation form
