@@ -19,20 +19,8 @@ class PlanningType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('salle', null, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'La salle ne peut pas être vide.',
-                    ]),
-                ],
-            ])
-            ->add('nbPlaceMax', null, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le nombre de places maximum ne peut pas être vide.',
-                    ]),
-                ],
-            ])
+            ->add('salle')
+            ->add('nbPlaceMax')
             ->add('date', null, [
                 'constraints' => [
                     new NotBlank([
@@ -44,13 +32,7 @@ class PlanningType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('heure', null, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'heure ne peut pas être vide.',
-                    ]),
-                ],
-            ])
+            ->add('heure')
             ->add('cour', EntityType::class, [
                 'class' => 'App\Entity\Cours',
                 'choice_label' => 'nom',

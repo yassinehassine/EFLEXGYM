@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Cours
@@ -18,6 +19,7 @@ class Cours
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * 
      */
     private $id;
 
@@ -25,6 +27,8 @@ class Cours
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Le nom du cours ne peut pas être vide.")
+
      */
     private $nom;
 
@@ -32,6 +36,8 @@ class Cours
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=0, nullable=false)
+     * @Assert\Choice(choices={"Presentiel", "En Ligne"}, message="Le type du cours doit être soit 'Presentiel' soit 'En Ligne'.")
+
      */
     private $type;
 
@@ -39,6 +45,7 @@ class Cours
      * @var string
      *
      * @ORM\Column(name="duree", type="string", length=255, nullable=false)
+     * * @Assert\NotBlank(message="La durée du cours ne peut pas être vide.")
      */
     private $duree;
 

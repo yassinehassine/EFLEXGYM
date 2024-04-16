@@ -15,32 +15,14 @@ class CoursType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom', null, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le nom du cours ne peut pas être vide.',
-                    ]),
-                ],
-            ])
+            ->add('nom')
             ->add('type', ChoiceType::class, [ // Use ChoiceType for dropdown selection
                 'choices' => [
                     'Presentiel' => 'Presentiel',
                     'En Ligne' => 'En Ligne',
                 ],
-                'constraints' => [
-                    new Choice([ // Use Choice constraint to ensure the value is one of the choices
-                        'choices' => ['Presentiel', 'En Ligne'],
-                        'message' => 'Le type du cours doit être soit "Presentiel" soit "En Ligne".',
-                    ]),
-                ],
             ])
-            ->add('duree', null, [
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'La durée du cours ne peut pas être vide.',
-                    ]),
-                ],
-            ]);
+            ->add('duree');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

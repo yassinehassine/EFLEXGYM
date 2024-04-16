@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Cours;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 /**
@@ -28,6 +30,7 @@ class Planning
      * @var string
      *
      * @ORM\Column(name="salle", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="La salle ne peut pas être vide.")
      */
     private $salle;
 
@@ -35,6 +38,8 @@ class Planning
      * @var int
      *
      * @ORM\Column(name="nb_place_max", type="integer", nullable=false)
+     * @Assert\NotBlank(message="Le nombre de places maximum ne peut pas être vide.")
+
      */
     private $nbPlaceMax;
 
@@ -42,6 +47,7 @@ class Planning
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="date", nullable=false)
+     * @Assert\GreaterThan("today", message="La date de début doit être future à aujourd'hui.")
      */
     private $date;
 
@@ -49,6 +55,7 @@ class Planning
      * @var string
      *
      * @ORM\Column(name="heure", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="L'heure ne peut pas être vide.")
      */
     private $heure;
 
