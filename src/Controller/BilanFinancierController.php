@@ -37,15 +37,13 @@ class BilanFinancierController extends AbstractController
     public function index(Request $request, BilanFinancierRepository $bilanFinancierRepository): Response
     {
         $sortField = $request->query->get('sort_field', 'dateDebut'); 
-        $sortDirection = $request->query->get('sort_direction', 'ASC'); // Default sort direction
+        $sortDirection = $request->query->get('sort_direction', 'ASC'); 
 
-        // Validate the sort field
         $validSortFields = ['dateDebut', 'revenusAbonnements', 'revenusProduits', 'profit'];
         if (!in_array($sortField, $validSortFields)) {
             throw new \InvalidArgumentException('Invalid sort field.');
         }
 
-        // Get all financial statements sorted according to the sort parameters
         $bilan_financiers = $bilanFinancierRepository->findBy([], [$sortField => $sortDirection]);
 
         return $this->render('bilan_financier/index.html.twig', [
@@ -93,7 +91,7 @@ public function edit(Request $request, BilanFinancier $bilanFinancier): Response
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Save changes including the new expenses
+      
         $this->entityManager->flush();
 
         return $this->redirectToRoute('app_bilan_financier_index', [], Response::HTTP_SEE_OTHER);
@@ -152,22 +150,19 @@ public function calculerProfit(int $id, BilanFinancierRepository $bilanFinancier
 {
     $bilanFinancier = $bilanFinancierRepository->find($id);
     
-    // Récupérer les nouvelles valeurs des abonnements, des produits et des salaires des coachs
     $revenusAbonnements = $abonnementRepository->calculateRevenusAbonnements($bilanFinancier);
     $revenusProduits = $produitRepository->calculateRevenusProduits($bilanFinancier);
     $salairesCoachs = $userRepository->calculateSalairesCoachs($bilanFinancier);
     
-    // Mettre à jour toutes les valeurs du bilan financier
+
     $bilanFinancier->setRevenusAbonnements($revenusAbonnements);
     $bilanFinancier->setRevenusProduits($revenusProduits);
     $bilanFinancier->setSalairesCoachs($salairesCoachs);
-    // Vous pouvez récupérer les autres valeurs (dépenses, prix de location) de la même manière et les mettre à jour ici
-    
-    // Calculer le profit en fonction des nouvelles valeurs
+  
     $profit = $revenusAbonnements + $revenusProduits - $salairesCoachs - ($bilanFinancier->getDepenses() ?? 0) - ($bilanFinancier->getPrixLocation() ?? 0);
     $bilanFinancier->setProfit($profit);
     
-    // Persistez les modifications dans la base de données
+    
     $this->entityManager->flush();
 
     return $this->json(['profit' => $profit]);

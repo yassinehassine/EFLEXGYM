@@ -20,7 +20,7 @@ class AbonnementController extends AbstractController
         $typeFilter = $request->query->get('type_filter');
         $nomAdherent = $request->query->get('nom_adherent');
         $perPage = 10;
-        $currentPage = $request->query->getInt('page', 1);  // Default to 1 if 'page' param is not specified
+        $currentPage = $request->query->getInt('page', 1); 
     
         if ($nomAdherent) {
             $abonnements = $abonnementRepository->findByNomAdherent($nomAdherent);
@@ -49,7 +49,7 @@ class AbonnementController extends AbstractController
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
-        // Proceed with saving
+
         $entityManager->persist($abonnement);
         $entityManager->flush();
 
@@ -103,14 +103,14 @@ class AbonnementController extends AbstractController
     #[Route('/monA/{user_id}', name: 'app_abonnement_monA', methods: ['GET'])]
     public function monA(int $user_id, AbonnementRepository $abonnementRepository): Response
     {
-        // Trouver l'abonnement associé à cet utilisateur via user_id
+       
         $abonnement = $abonnementRepository->findOneBy(['id_adherent' => $user_id]);
     
         if (!$abonnement) {
             throw $this->createNotFoundException('Aucun abonnement trouvé pour cet utilisateur.');
         }
     
-        // Afficher la vue avec les détails de l'abonnement
+    
         return $this->render('abonnement/monAbonnement.html.twig', [
             'abonnement' => $abonnement,
         ]);
