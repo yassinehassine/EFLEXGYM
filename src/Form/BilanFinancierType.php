@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 
 class BilanFinancierType extends AbstractType
@@ -18,12 +19,7 @@ class BilanFinancierType extends AbstractType
         $builder
         ->add('dateDebut', DateTimeType::class, [
             'widget' => 'single_text', 
-            'constraints' => [
-                new GreaterThan([
-                    'value' => 'today', 
-                    'message' => 'La date de début doit être future à aujourd\'hui.',
-                ]),
-            ],
+           
         ])
         ->add('dateFin', DateTimeType::class, [
             'widget' => 'single_text',
