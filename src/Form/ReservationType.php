@@ -6,15 +6,24 @@ use App\Entity\Reservation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\User;
+
+
 
 class ReservationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('idPlaning')
-            ->add('numTell')
-            ->add('idUser')
+        ->add('idPlaning')
+        ->add('numTell')
+        ->add('idUser', EntityType::class, [
+            'class' => User::class,
+            'choice_label' => function ($user) {
+                return $user->getPrenom() . ' ' . $user->getNom();
+            },
+        ])
         ;
     }
 

@@ -1,3 +1,5 @@
+{# calanderplanning/index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Planning Calendar{% endblock %}
@@ -25,7 +27,7 @@
                         {
                             title: '{{ planning.salle }} - {{ planning.cour.nom }}',
                             start: '{{ planning.date|date("Y-m-d") }}T{{ planning.heure }}',
-                            url: '{{ path('app_reservation_new', {'planningId': planning.id, 'userId': userId}) }}' // URL to reservation form with planning ID as parameter
+                            url: '{{ path('app_reservation_new', {'planningId': planning.id}) }}' // Updated URL to include only the planningId parameter
                         },
                     {% endfor %}
                 ],

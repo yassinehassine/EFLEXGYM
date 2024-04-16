@@ -26,50 +26,37 @@ class ReservationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_reservation_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository, Security $security): Response
-    {
-        // Fetch the current user from the security component
-        $user = $security->getUser();
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    // Get the planning ID from the URL parameter
+    $planningId = $request->query->get('planningId');
+    // Fetch the planning entity based on the ID
+    $planning = $entityManager->getRepository(Planning::class)->find($planningId);
 
-        // Check if user exists
-        if (!$user) {
-            // Handle the case when user is not found
-            // For example, display an error message or redirect
-            return $this->redirectToRoute('app_error');
-        }
+    // Create a new reservation entity
+    $reservation = new Reservation();
+    $reservation->setIdPlaning($planningId); // Set the planning ID for the reservation
 
-        // Get the planning ID from the URL parameter
-        $planningId = $request->query->get('planningId');
-        // Fetch the planning entity based on the ID
-        $planning = $entityManager->getRepository(Planning::class)->find($planningId);
+    // Create the reservation form
+    $form = $this->createForm(ReservationType::class, $reservation);
+    $form->handleRequest($request);
 
-        // Retrieve the user ID
-        $userId = $user->getId();
+    // Handle form submission
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->persist($reservation);
+        $entityManager->flush();
 
-        // Create a new reservation entity
-        $reservation = new Reservation();
-        $reservation->setIdPlaning($planningId); // Set the planning ID for the reservation
-        $reservation->setIdUser($userId); // Set the user ID for the reservation
-
-        // Create the reservation form
-        $form = $this->createForm(ReservationType::class, $reservation);
-        $form->handleRequest($request);
-
-        // Handle form submission
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reservation);
-            $entityManager->flush();
-
-            // Redirect to the reservation index page after successful submission
-            return $this->redirectToRoute('app_reservation_index');
-        }
-
-        // Render the reservation form
-        return $this->renderForm('reservation/new.html.twig', [
-            'reservation' => $reservation,
-            'form' => $form,
-        ]);
+        // Redirect to the reservation index page after successful submission
+        return $this->redirectToRoute('app_reservation_index');
     }
+
+    // Render the reservation form
+    return $this->renderForm('reservation/new.html.twig', [
+        'reservation' => $reservation,
+        'form' => $form,
+    ]);
+}
+
 
     #[Route('/{idReservation}', name: 'app_reservation_delete', methods: ['POST'])]
     public function delete(Request $request, Reservation $reservation, EntityManagerInterface $entityManager): Response
