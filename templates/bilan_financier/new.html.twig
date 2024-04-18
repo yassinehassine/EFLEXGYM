@@ -18,19 +18,7 @@
         <button type="submit" class="btn">{{ button_label|default('Sauvegarder') }}</button>
     {{ form_end(form) }}
 
-    {% if form_errors(form.prixLocation) %}
-        <div class="alert">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-            Le montant doit être un nombre positif et supérieur à zéro.
-        </div>
-    {% endif %}
-
-    {% if form_errors(form.depenses) %}
-        <div class="alert">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-            Le montant doit être un nombre positif et supérieur à zéro.
-        </div>
-    {% endif %}
+   
 
     <a href="{{ path('app_bilan_financier_index') }}">Retour</a>
 

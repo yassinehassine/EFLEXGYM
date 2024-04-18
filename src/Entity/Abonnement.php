@@ -23,14 +23,20 @@ class Abonnement
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Assert\PositiveOrZero]
-    private ?float $prix=null;
+    #[Assert\Positive]
+    #[Assert\GreaterThan(value: 0, message: 'Le prix doit être un nombre strictement supérieur à zéro.')]
+    private ?float $prix = null;
 
-    #[ORM\Column(type:"datetime")]
-    private ?\DateTimeInterface $dateDebut=null;
+    #[ORM\Column(type: "datetime")]
+    #[Assert\GreaterThan('today', message: 'La date de début doit être future à aujourd\'hui.')]
+    private ?\DateTimeInterface $dateDebut = null;
 
-    #[ORM\Column(type:"datetime")]
-    private ?\DateTimeInterface $dateFin=null;
+    #[ORM\Column(type: "datetime")]
+    #[Assert\Expression(
+        "this.getDateFin() > this.getDateDebut()",
+        message:"La date de fin doit être postérieure à la date de début."
+    )]
+    private ?\DateTimeInterface $dateFin = null;
 
     #[ORM\Column(length:150)]
     private ?string $etat=null;

@@ -28,36 +28,13 @@ class AbonnementType extends AbstractType
                     'Mensuel' => 'mensuel',
                 ],
             ])
-            ->add('prix', null, [
-                'constraints' => [
-                    new NotBlank(),
-                    new Positive([
-                      
-                    ]),
-                    new GreaterThan([
-                        'value' => 0,
-                       
-                    ]),
-                ],
-            ])
+            ->add('prix')
             
             ->add('dateDebut', DateTimeType::class, [
-                'widget' => 'single_text', 
-                'constraints' => [
-                    new GreaterThan([
-                        'value' => 'today', 
-                        'message' => 'La date de début doit être future à aujourd\'hui.',
-                    ]),
-                ],
+                'widget' => 'single_text',
             ])
             ->add('dateFin', DateTimeType::class, [
                 'widget' => 'single_text',
-                'constraints' => [
-                    new GreaterThan([
-                        'propertyPath' => 'parent.all[dateDebut].data',
-                        'message' => 'La date de fin doit être postérieure à la date de début.'
-                    ]),
-                ],
             ])
             ->add('etat', ChoiceType::class, [
                 'choices' => [

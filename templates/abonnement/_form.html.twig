@@ -1,9 +1,6 @@
 {{ form_start(form) }}
     {{ form_row(form.type) }}
-    <div>
-        {{ form_label(form.prix, 'Prix') }}
-        {{ form_widget(form.prix) }}
-    </div>
+  {{ form_row(form.prix) }}
     {{ form_row(form.dateDebut) }}
     {{ form_row(form.dateFin) }}
     {{ form_row(form.etat) }}
@@ -13,10 +10,3 @@
 
     <button class="btn">{{ button_label|default('sauvegarder') }}</button>
 {{ form_end(form) }}
-
-{% if form_errors(form.prix) %}
-    <div class="alert">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-        Le prix doit être un nombre positif et supérieur à zéro.
-    </div>
-{% endif %}
