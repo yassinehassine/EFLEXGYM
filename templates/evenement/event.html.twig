@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Events{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/events.css') }}">
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal content box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* Close button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <section class="team-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="team-title">
+                        <div class="section-title">
+                            <span>Our Events</span>
+                            <h2>JOIN OUR EVENTS</h2>
+                        </div>
+                        <a href="#" class="primary-btn btn-normal appoinment-btn">View All</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="ts-slider owl-carousel">
+                    {% for evenement in evenements %}
+                        <div class="col-lg-4">
+                            <div class="ts-item set-bg" data-setbg="{{ asset('uploads/' ~ evenement.image) }}">
+                                <div class="ts_text">
+                                    <h4>{{ evenement.eventName }}</h4>
+                                    <p class="event-buttons">
+                                        <form method="post" action="{{ path('app_evenement_participate', {'id': evenement.id}) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('participate' ~ evenement.id) }}">
+                                            <input type="submit" class="btn btn-primary" value="Participer">
+                                        </form>
+                                        <button class="btn btn-secondary details-btn" data-event-id="{{ evenement.id }}">Details</button>
+
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal for event details -->
+    <div id="eventDetailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Event Details</h2>
+        <div id="eventDetails"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+    // Get the modal
+    const modal = document.getElementById('eventDetailsModal');
+
+    // Get the <span> element that closes the modal
+    const closeBtn = document.getElementsByClassName('close')[0];
+
+    // When the user clicks the button, open the modal
+    const detailsBtns = document.querySelectorAll('.details-btn');
+    detailsBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const eventId = btn.getAttribute('data-event-id');
+            fetch('{{ path('app_evenement_details') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ 'id': eventId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                let detailsHtml = '';
+                for (const [key, value] of Object.entries(data)) {
+                    if (key !== 'image') {
+                        detailsHtml += `<p><strong>${key}:</strong> ${value}</p>`;
+                    }
+                }
+                document.getElementById('eventDetails').innerHTML = detailsHtml;
+                modal.style.display = 'block';
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
+    // When the user clicks on <span> (x), close the modal
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+# config/routes.yaml
+
+participate_event:
+    path: /participate/{eventId}
+    controller: App\Controller\ParticipationController::participateEvent
+app_participation_participate:
+    path: /participate/{eventId}
+    controller: App\Controller\ParticipationController::participateEvent
+    methods: [GET]

@@ -1,0 +1,49 @@
+/* public/css/events.css */
+body {
+    background-color: black;
+    color: white;
+}
+
+.title {
+    color: orange;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.event-button {
+    background-color: orange !important;
+    color: black !important;
+    border: 1px solid orange !important;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.event-button:hover {
+    background-color: #d35400 !important; /* Darker orange */
+    color: black !important;
+}
+
+.event-card {
+    background-color: black;
+    color: white;
+    border: 1px solid orange;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.event-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.event-image {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.event-title {
+    color: rgb(2, 1, 1);
+}
