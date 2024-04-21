@@ -92,11 +92,11 @@
 						                <img class="img1" src={{asset("assets/imagePanier.png")}} alt="" width="180px" class="mt-3 mb-3"> 
 						                <h3 style="font-weight: bold;">Coût totale: {{totalPrice|number_format(0, '.', ',')}} DT</h3>
 
-                                        <h5 style="margin-top: 15px;">hamza</h5>
-                                        <h6 style="margin-top: -7px;">Allez</h6>
+                                        
 
-						                <a href="#" class="button-77">Commander</a>
-                             <div class="aide" style=" margin-top: 125%; position: absolute;">  Besoin d'aide ? </div>
+						               <a id="sending" href="{{ path('app_stripe') }}">
+								<button type="button" class="btn btn-primary btn-round btn-block" style="margin-top: 12px; margin-left:40%; font-weight:bold;">Commander</button>
+								</a>   <div class="aide" style=" margin-top: 125%; position: absolute;">  Besoin d'aide ? </div>
                              <div class="aaaaa" style=" margin-top: 134%; position: absolute;">  Notre processus de Commande est simple et efficace</div>
                              
 						            </article>
