@@ -60,3 +60,7 @@ app_bilan_financier_calculer_profit:
     path: /bilan_financier/calculer-profit/{id}
     controller: App\Controller\BilanFinancierController::calculerProfit
     methods: ['GET']
+generate_pdf:
+    path: /generate_pdf
+    controller: App\Controller\PdfController::generatePdf
+    methods: ['GET']

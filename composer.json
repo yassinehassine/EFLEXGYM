@@ -13,6 +13,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^2.16",
         "knplabs/knp-paginator-bundle": "^5.9",
+        "knplabs/knp-snappy-bundle": "^1.10",
         "league/oauth2-client": "^2.7",
         "league/oauth2-google": "^4.0",
         "phpdocumentor/reflection-docblock": "^5.3",
