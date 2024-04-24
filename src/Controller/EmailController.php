@@ -7,81 +7,68 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\AbonnementRepository;
 use League\OAuth2\Client\Provider\Google;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Transport\Dsn;
 
-use Symfony\Bridge\Twig\Mime\TemplatedEmail as Email;
+
 use App\Entity\Abonnement;
+
+
+
+
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use League\OAuth2\Client\Provider\AbstractProvider;
 
 class EmailController extends AbstractController
 {
-    private $googleProvider;
+    #[Route('/send-email', name: 'app_send_email', methods: ['GET', 'POST'])]
 
-    public function __construct(Google $googleProvider)
+    public function sendEmail(Request $request, AbonnementRepository $abonnementRepository, MailerInterface $mailer): Response
     {
-        $this->googleProvider = $googleProvider;
-    }
-
-    #[Route('/send-email', name: 'app_send_email',  methods: ['POST'])]
-    public function sendEmail(Request $request, MailerInterface $mailer): Response
-    {
-
-        $options = [
-            'clientId' => '1050520473007-gtb12takp27cm6mrrltu9ffk8al9dv2l.apps.googleusercontent.com',
-            'clientSecret' => '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',
-            'redirectUri' => 'http://127.0.0.1:8000/abonnement'
-        ];
-     
-        $code = $request->query->get('code');
-
-        if ($code) {
-          
-            $accessToken = $this->googleProvider->getAccessToken('authorization_code', [
-                'code' => $code
-            ]);
-
-            $mailer->send($this->createEmail($accessToken));
-
-            $this->addFlash('success', 'Email sent successfully.');
-
-            return $this->redirectToRoute('app_abonnement_index');
-        }
-
-       
-        $authorizationUrl = $this->googleProvider->getAuthorizationUrl();
-        return $this->redirect($authorizationUrl);
-    }
-
-    private function createEmail(string $accessToken): Email
-    {
-  
         $abonnementId = $request->request->get('abonnement_id');
 
-       
-        $abonnement = $this->getDoctrine()->getRepository(Abonnement::class)->find($abonnementId);
-
+        // Query the database to find the Abonnement entity by its ID
+        $abonnement = $abonnementRepository->find($abonnementId);
+    
+        // Check if the Abonnement entity with the provided ID exists
         if (!$abonnement) {
+            // If not found, throw a NotFoundException
             throw $this->createNotFoundException('L\'abonnement avec l\'ID '.$abonnementId.' n\'existe pas.');
         }
-
+    
+        // Retrieve the user associated with the Abonnement
         $user = $abonnement->getIdAdherent();
 
         if (!$user) {
             throw $this->createNotFoundException('L\'utilisateur associé à l\'abonnement avec l\'ID '.$abonnementId.' n\'existe pas.');
         }
 
-     
-        $recipientEmail = $user->getEmail();
-
     
+        // Retrieve the recipient email
+        $recipientEmail = $user->getEmail();
+        
+        // Create an Email object
         $email = (new Email())
             ->from('nadazaghdoud.5@gmail.com')
             ->to($recipientEmail)
-            ->subject('Reminder: Renew Your Subscription')
-            ->html('<p>Dear member, your subscription will expire soon. Please renew it.</p>');
-
-        // Set the access token in the headers to authenticate with Gmail
-        $email->getHeaders()->addTextHeader('Authorization', 'Bearer ' . $accessToken);
-
-        return $email;
+            ->subject('A Cool Subject!')
+            ->text('The plain text version of the message.');
+    
+        // Create SMTP transport with OAuth2 provider information
+        $provider = new Google([
+            'clientId'     => '1050520473007-gtb12takp27cm6mrrltu9ffk8al9dv2l.apps.googleusercontent.com',
+            'clientSecret' => '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',
+            'redirectUri'  => 'http://127.0.0.1:8000/send-email', // Modify the redirect URL accordingly
+        ]);
+        
+        // Get the authorization URL from the OAuth2 provider
+        $authorizationUrl = $provider->getAuthorizationUrl();
+        
+        // Redirect the user to the authorization URL to start the authorization process
+        return $this->redirect($authorizationUrl);
     }
 }

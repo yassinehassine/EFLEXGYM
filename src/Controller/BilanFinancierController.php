@@ -167,4 +167,28 @@ public function calculerProfit(int $id, BilanFinancierRepository $bilanFinancier
 
     return $this->json(['profit' => $profit]);
 }
+
+#[Route('/statistique', name: 'stat', methods: ['GET', 'POST'])]
+public function statistiques(BilanFinancierRepository $bilanFinancierRepository)
+{
+    // Récupérer les données pour calculer les statistiques des profits
+    $bilanFinanciers = $bilanFinancierRepository->findAll(); // Par exemple, récupérez tous les bilans financiers
+    
+    // Initialiser les tableaux pour stocker les données
+    $dates = [];
+    $profits = [];
+    
+    // Calculer les statistiques des profits pour chaque bilan financier
+    foreach ($bilanFinanciers as $bilanFinancier) {
+        $dates[] = $bilanFinancier->getDateDebut()->format('Y-m-d'); // Stocker la date de début du bilan financier
+        $profits[] = $bilanFinancier->getProfit(); // Stocker le profit du bilan financier
+    }
+    
+    // Rendre la vue avec les données des statistiques des profits
+    return $this->render('bilan_financier/stats.html.twig', [
+        'dates' => json_encode($dates),
+        'profits' => json_encode($profits),
+    ]);
+}
+
 }

@@ -21,7 +21,7 @@ app_abonnement_index:
 send_email:
     path: '/send-email'
     controller: 'App\Controller\EmailController::sendEmail'
-
+    methods: ['GET', 'POST']
 app_bilan_financier_show:
     path: /bilan_financier/{id}
     controller: App\Controller\BilanFinancierController::show

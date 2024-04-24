@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Abonnement;
 use App\Form\AbonnementType;
 use App\Repository\AbonnementRepository;
@@ -15,28 +16,29 @@ use Symfony\Component\Routing\Annotation\Route;
 class AbonnementController extends AbstractController
 {
     #[Route('/', name: 'app_abonnement_index', methods: ['GET'])]
-    public function index(Request $request, AbonnementRepository $abonnementRepository): Response
+    public function index(Request $request, AbonnementRepository $abonnementRepository ,  PaginatorInterface $paginator): Response
     {
+
+        $abonnements= $abonnementRepository->findAll();
         $typeFilter = $request->query->get('type_filter');
         $nomAdherent = $request->query->get('nom_adherent');
-        $perPage = 10;
-        $currentPage = $request->query->getInt('page', 1); 
+      
     
         if ($nomAdherent) {
             $abonnements = $abonnementRepository->findByNomAdherent($nomAdherent);
         } else {
             $abonnements = $typeFilter ? $abonnementRepository->findBy(['type' => $typeFilter]) : $abonnementRepository->findAll();
         }
-    
-        $totalItems = count($abonnements);
-        $totalPages = ceil($totalItems / $perPage);
-        $offset = ($currentPage - 1) * $perPage;
-        $abonnementsToShow = array_slice($abonnements, $offset, $perPage);
+
+        $abonnements = $paginator->paginate(
+            $abonnements, 
+            $request->query->getInt('page', 1),
+            10
+        );
+   
     
         return $this->render('abonnement/index.html.twig', [
-            'abonnements' => $abonnementsToShow,
-            'total_pages' => $totalPages,
-            'current_page' => $currentPage
+            'abonnements' => $abonnements,
         ]);
     }
     
