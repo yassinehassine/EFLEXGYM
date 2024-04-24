@@ -12,8 +12,10 @@ app_abonnement_monA:
     controller: App\Controller\AbonnementController::monA
     methods: GET
     
-
-
+statistiques:
+    path: /statistique
+    controller: App\Controller\BilanFinancierController::statistiques
+    methods: ['GET', 'POST']
 app_abonnement_index:
     path: /abonnement
     controller: App\Controller\AbonnementController::index
