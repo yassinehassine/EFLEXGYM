@@ -169,26 +169,34 @@ public function calculerProfit(int $id, BilanFinancierRepository $bilanFinancier
 }
 
 #[Route('/statistique', name: 'stat', methods: ['GET', 'POST'])]
-public function statistiques(BilanFinancierRepository $bilanFinancierRepository)
+public function statistiques(BilanFinancierRepository $bilanFinancierRepository, AbonnementRepository $abonnementRepository, ProduitRepository $produitRepository)
 {
-    // Récupérer les données pour calculer les statistiques des profits
-    $bilanFinanciers = $bilanFinancierRepository->findAll(); // Par exemple, récupérez tous les bilans financiers
+    // Récupérer les données pour calculer les statistiques des profits et des revenus d'abonnements
+    $bilanFinanciers = $bilanFinancierRepository->findAll(); // Récupérer tous les bilans financiers
     
     // Initialiser les tableaux pour stocker les données
     $dates = [];
     $profits = [];
+    $revenuesAbonnements = [];
+    $revenuesProduits = [];
     
-    // Calculer les statistiques des profits pour chaque bilan financier
+    // Calculer les statistiques des profits et des revenus d'abonnements pour chaque bilan financier
     foreach ($bilanFinanciers as $bilanFinancier) {
         $dates[] = $bilanFinancier->getDateDebut()->format('Y-m-d'); // Stocker la date de début du bilan financier
         $profits[] = $bilanFinancier->getProfit(); // Stocker le profit du bilan financier
+        // Calculer les revenus d'abonnements pour ce bilan financier en utilisant la méthode appropriée de votre repository
+        $revenuesAbonnements[] = $abonnementRepository->calculateRevenusAbonnements($bilanFinancier);
+        $revenuesProduits[] = $produitRepository->calculateRevenusProduits($bilanFinancier);
     }
     
-    // Rendre la vue avec les données des statistiques des profits
+    // Rendre la vue avec les données des statistiques des profits et des revenus d'abonnements
     return $this->render('bilan_financier/stats.html.twig', [
         'dates' => json_encode($dates),
         'profits' => json_encode($profits),
+        'revenuesAbonnements' => json_encode($revenuesAbonnements),
+        'revenuesProduits' => json_encode($revenuesProduits), // Correction de la variable ici
     ]);
 }
+
 
 }

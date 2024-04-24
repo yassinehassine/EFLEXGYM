@@ -1,5 +1,5 @@
 {% extends 'back.html.twig' %}
-{% block title %}Statistiques des profits{% endblock %}
+{% block title %}Statistiques{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
@@ -8,11 +8,17 @@
 {% block body %}
     <div class="container">
         <center>
-            <h1>Statistiques des profits</h1>
+            <h1>Statistiques</h1>
         </center>
-        <canvas id="profitsChart" width="800" height="400"></canvas>
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="profitsChart" width="400" height="200"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="revenuesChart" width="400" height="200"></canvas>
+            </div>
+        </div>
     </div>
-
 
 {% block javascripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
@@ -20,18 +26,18 @@
         // Obtenez les données des statistiques des profits passées depuis le contrôleur
         let dates = {{ dates|raw }};
         let profits = {{ profits|raw }};
+        let revenuesAbonnements = {{ revenuesAbonnements|raw }};
+        let revenuesProduits = {{ revenuesProduits|raw }};
 
-        // Créez un nouveau graphique
+        // Créez un nouveau graphique pour les profits
         let profitsChart = document.getElementById('profitsChart').getContext('2d');
-
-        // Créez le graphique
-        let chart = new Chart(profitsChart, {
+        let profitsChartInstance = new Chart(profitsChart, {
             type: 'line',
             data: {
-                labels: dates, // Utilisez les dates comme étiquettes
+                labels: dates,
                 datasets: [{
                     label: 'Profits',
-                    data: profits, // Utilisez les profits comme données
+                    data: profits,
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
@@ -47,6 +53,37 @@
                 }
             }
         });
+
+        // Créez un nouveau graphique pour les revenus
+        let revenuesChart = document.getElementById('revenuesChart').getContext('2d');
+        let revenuesChartInstance = new Chart(revenuesChart, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Revenues d\'abonnements',
+                    data: revenuesAbonnements,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Revenues de produits',
+                    data: revenuesProduits,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
     </script>
-    {% endblock %}
+{% endblock %}
 {% endblock %}
