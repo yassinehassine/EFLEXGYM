@@ -5,6 +5,8 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\BilanFinancier;
+use Doctrine\ORM\QueryBuilder;
+
 
 
 class UserRepository extends ServiceEntityRepository
@@ -25,6 +27,16 @@ class UserRepository extends ServiceEntityRepository
     $result = $query->getSingleScalarResult();
 
     return $result ? (float) $result : null;
+}
+
+public function countUsersByRole(string $role): int
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u)')
+        ->andWhere('u.role = :role')
+        ->setParameter('role', $role)
+        ->getQuery()
+        ->getSingleScalarResult();
 }
 
     

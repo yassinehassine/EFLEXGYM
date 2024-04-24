@@ -169,7 +169,7 @@ public function calculerProfit(int $id, BilanFinancierRepository $bilanFinancier
 }
 
 #[Route('/statistique', name: 'stat', methods: ['GET', 'POST'])]
-public function statistiques(BilanFinancierRepository $bilanFinancierRepository, AbonnementRepository $abonnementRepository, ProduitRepository $produitRepository)
+public function statistiques(BilanFinancierRepository $bilanFinancierRepository, AbonnementRepository $abonnementRepository, ProduitRepository $produitRepository, UserRepository $userRepository)
 {
     // Récupérer les données pour calculer les statistiques des profits et des revenus d'abonnements
     $bilanFinanciers = $bilanFinancierRepository->findAll(); // Récupérer tous les bilans financiers
@@ -189,14 +189,19 @@ public function statistiques(BilanFinancierRepository $bilanFinancierRepository,
         $revenuesProduits[] = $produitRepository->calculateRevenusProduits($bilanFinancier);
     }
     
-    // Rendre la vue avec les données des statistiques des profits et des revenus d'abonnements
+    // Récupérer le nombre d'adhérents et de coachs dans la base de données
+    $nbAdherents = $userRepository->countUsersByRole('adherent');
+    $nbCoachs = $userRepository->countUsersByRole('coach');
+    
+    // Rendre la vue avec les données des statistiques des profits et des revenus d'abonnements, ainsi que le nombre d'adhérents et de coachs
     return $this->render('bilan_financier/stats.html.twig', [
         'dates' => json_encode($dates),
         'profits' => json_encode($profits),
         'revenuesAbonnements' => json_encode($revenuesAbonnements),
-        'revenuesProduits' => json_encode($revenuesProduits), // Correction de la variable ici
+        'revenuesProduits' => json_encode($revenuesProduits),
+        'nbAdherents' => $nbAdherents,
+        'nbCoachs' => $nbCoachs,
     ]);
 }
-
 
 }
