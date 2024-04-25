@@ -31,7 +31,7 @@ class PaymentController extends AbstractController
             return $total + $product->getIdProduit()->getPrix();
         }, 0);
 
-        $totalPrice += 8;
+        
 
         return $this->render('payment/payment.html.twig', [
             'stripe_key' => $_ENV["STRIPE_KEY"],

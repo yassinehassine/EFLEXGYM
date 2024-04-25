@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}Produits{% endblock %}
 
 {% block css %}
     {{ parent() }}
@@ -59,9 +59,9 @@
             <button type="button" class="btn btn-secondary" onclick="filterByCategory('alimentaire')">Alimentaire</button>
             <button type="button" class="btn btn-secondary" onclick="filterByCategory('vestimentaire')">Vestimentaire</button>
         </div>
-        <a  href="{{ path('app_panier') }}">
-                    
-        <img src="{{ asset('assets/panier.png') }}" width="35px;">
+        <a href="{{ path('app_panier') }}">
+            <img src="{{ asset('uploads/panier.png') }}" width="35px;">
+        </a>
                      
         <div class="row" id="productContainer">
             {% for key, produit in produits %}
@@ -73,11 +73,11 @@
                             <p class="card-text">{{ produit.description }}</p>
                             <p class="card-text">Price: ${{ produit.prix }}</p>
                             {% if produit.getId() in existingArticles %}
-                            <img src="{{ asset('assets/images/basketChecked.png') }}" alt="exist in cart" width="54px">
+                                <img src="{{ asset('uploads/pa.png') }}" alt="exist in cart" width="54px">
                             {% else %}
-                            <a href="{{ path('app_addToPanier', {'idp': produit.getId()} ) }}">
-                            <img src="{{ asset('assets/images/basket2.png') }}" alt="add to cart" width="52px">
-                            </a>
+                                <a href="{{ path('app_addToPanier', {'idp': produit.getId()} ) }}">
+                                    <img src="{{ asset('uploads/pa.png') }}" alt="add to cart" width="52px">
+                                </a>
                             {% endif %}
                         </div>
                     </div>

@@ -21,6 +21,12 @@ class PanierRepository extends ServiceEntityRepository
         parent::__construct($registry, Panier::class);
     }
 
+    public function setQuantite(int $quantite): self
+{
+    $this->quantite = $quantite;
+
+    return $this;
+}
 //    /**
 //     * @return Panier[] Returns an array of Panier objects
 //     */
