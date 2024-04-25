@@ -5,5 +5,5 @@ knp_snappy:
         options:    []
     image:
         enabled:    true
-        binary:     '%env(WKHTMLTOIMAGE_PATH)%'
+        binary:     '"C:\Program Files\wkhtmltopdf\bin\wkhtmltoimage.exe"'
         options:    []
