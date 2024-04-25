@@ -31,6 +31,16 @@ class BilanFinancierRepository extends ServiceEntityRepository
 
     return $result['maxId'] ?? 0;
 }
+public function findOneByMonth(int $month, int $year): ?BilanFinancier
+{
+    return $this->createQueryBuilder('b')
+        ->andWhere('MONTH(b.dateDebut) = :month')
+        ->andWhere('YEAR(b.dateDebut) = :year')
+        ->setParameter('month', $month)
+        ->setParameter('year', $year)
+        ->getQuery()
+        ->getOneOrNullResult();
+}
 
 
 
