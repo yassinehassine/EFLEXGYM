@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use Psr\Log\LoggerInterface;
 use App\Entity\BilanFinancier;
+use App\service\PdfGenerator;
 use App\Form\BilanFinancierType;
 use App\Repository\BilanFinancierRepository;
 use App\Repository\AbonnementRepository;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Snappy\Pdf;
 
 #[Route('/bilan/financier')]
 class BilanFinancierController extends AbstractController
@@ -24,12 +26,12 @@ class BilanFinancierController extends AbstractController
     private $entityManager;
     private $logger;
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
+    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger, PdfGenerator $pdfGenerator)
     {
         $this->entityManager = $entityManager;
         $this->logger = $logger;
         
-
+        $this->pdfGenerator = $pdfGenerator;
        
     }
 
@@ -204,4 +206,13 @@ public function statistiques(BilanFinancierRepository $bilanFinancierRepository,
     ]);
 }
 
+#[Route('/generate-pdf/{id}', name: 'app_bilan_financier_generate_pdf', methods: ['GET'])]
+    public function generatePdf(int $id, BilanFinancierRepository $bilanFinancierRepository): Response
+    {
+        // Generate PDF using the PdfGenerator service
+        $pdfResponse = $this->pdfGenerator->generatePdf($id, $bilanFinancierRepository);
+
+        // Return the PDF as a response
+        return $pdfResponse;
+    }
 }
