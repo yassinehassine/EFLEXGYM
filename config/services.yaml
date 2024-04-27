@@ -12,7 +12,13 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
- 
+    App\service\EmailSender:
+        arguments:
+            $mailer: '@Symfony\Component\Mailer\MailerInterface'
+            $requestStack: '@Symfony\Component\HttpFoundation\RequestStack'
+            $urlGenerator: '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
+            $defaultSalleDeSportName: 'E-Flex Gym'
+
     App\service\PdfGenerator:
         arguments:
             $pdf: '@knp_snappy.pdf'

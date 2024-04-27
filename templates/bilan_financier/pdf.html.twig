@@ -1,25 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Rapport financier mensuel</title>
+    <title>Rapport financier mensuel - E-Flex Gym</title>
     <style>
-        /* Ajoutez votre style CSS ici */
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
         }
-        /* Autres styles CSS */
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .financial-details {
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>E-Flex Gym - Rapport financier mensuel - Mois {{ month }}</h1>
+    <div class="container">
+        <h1>Rapport financier mensuel - E-Flex Gym</h1>
+        <h2>Rapport détaillé du bilan financier - Mois {{ month }}</h2>
 
-    <h2>Rapport détaillé du bilan financier</h2>
-
-    <p>Revenus des abonnements : {{ revenusAbonnements }}</p>
-    <p>Revenus des produits : {{ revenusProduits }}</p>
-    <p>Dépenses : {{ depenses }}</p>
-    <p>Profit : {{ profit }}</p>
-    <!-- Autres informations financières -->
+        <div class="financial-details">
+            <p><strong>Revenus des abonnements :</strong> {{ revenusAbonnements }} TND</p>
+            <p><strong>Revenus des produits :</strong> {{ revenusProduits }} TND</p>
+            <p><strong>Dépenses :</strong> {{ depenses }} TND</p>
+            <p><strong>Profit :</strong> {{ profit }} TND</p>
+            <!-- Autres informations financières -->
+        </div>
+    </div>
 </body>
 </html>
