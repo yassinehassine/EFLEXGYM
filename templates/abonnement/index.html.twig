@@ -62,10 +62,10 @@
           
            <td>  {{ include('abonnement/_delete_form.html.twig', {'id': abonnement.id}) }}</td>
         <td>
- <form method="post" action="{{ path('send_email') }}">
-        <input type="hidden" name="abonnement_id" value="{{ abonnement.id }}">
-         <button type="submit" class="btn btn-light"><i class="fas fa-envelope"></i></button>
-                    </form>
+ <form method="post" action="{{ path('app_send_email') }}">
+    <input type="hidden" name="abonnement_id" value="{{ abonnement.id }}">
+    <button type="submit" class="btn btn-light"><i class="fas fa-envelope"></i> Envoyer un e-mail</button>
+</form>
 
 
 </td>
