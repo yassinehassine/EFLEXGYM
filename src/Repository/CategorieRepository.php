@@ -20,7 +20,15 @@ class CategorieRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Categorie::class);
     }
-
+    public function countByType($type)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('COUNT(r.type)')
+            ->where('r.type = :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 //    /**
 //     * @return Categorie[] Returns an array of Categorie objects
 //     */

@@ -27,7 +27,7 @@
 </head>
 
 <body>
-{% block panier %}
+
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -160,7 +160,7 @@
         </div>
     </section>
     <!-- Hero Section End -->
-
+{% block panier %}
     <!-- ChoseUs Section Begin -->
     <section class="choseus-section spad">
         <div class="container">
@@ -473,6 +473,7 @@
     </section>
     <!-- Team Section End -->
 {% endblock %}
+{% endblock %}
     <!-- Get In Touch Section Begin -->
     <div class="gettouch-section">
         <div class="container">
@@ -600,7 +601,7 @@
     <script src="{{asset('js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
 {% endblock %}
-{% endblock %}
+
 
 
 </body>

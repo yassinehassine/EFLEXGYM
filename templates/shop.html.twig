@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Produits{% endblock %}
+{% block title %}{% endblock %}
 
 {% block css %}
     {{ parent() }}
@@ -63,7 +63,7 @@
             <img src="{{ asset('uploads/panier.png') }}" width="35px;">
         </a>
                      
-        <div class="row" id="productContainer">
+       <div class="row" id="productContainer">
             {% for key, produit in produits %}
                 <div class="col-md-4 product" data-page="{{ ((key // 3) + 1) }}" data-category="{{ produit.categorie }}">
                     <div class="card mb-4 shadow-sm">
@@ -73,11 +73,9 @@
                             <p class="card-text">{{ produit.description }}</p>
                             <p class="card-text">Price: ${{ produit.prix }}</p>
                             {% if produit.getId() in existingArticles %}
-                                <img src="{{ asset('uploads/pa.png') }}" alt="exist in cart" width="54px">
+                                <button type="button" class="btn btn-success" onclick="addToCart({{ produit.getId() }})">deja exist </button>
                             {% else %}
-                                <a href="{{ path('app_addToPanier', {'idp': produit.getId()} ) }}">
-                                    <img src="{{ asset('uploads/pa.png') }}" alt="add to cart" width="52px">
-                                </a>
+                                <button type="button" class="btn btn-primary" onclick="addToCart({{ produit.getId() }})">ajouter au panier</button>
                             {% endif %}
                         </div>
                     </div>
@@ -136,6 +134,33 @@
                     cards[i].style.display = "none";
                 }
             }
+        }
+          function addToCart(productId) {
+            fetch('{{ path('app_addToPanier', {'idp': '_productId_'})|replace({'_productId_': 'PLACEHOLDER'}) }}'.replace('PLACEHOLDER', productId), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the button to show "In Cart"
+                    const button = document.querySelector(`button[data-product-id="${productId}"]`);
+                    if (button) {
+                        button.innerText = 'In Cart';
+                        button.disabled = true;
+                        // Reload the page
+                        window.location.reload();
+                    }
+                } else {
+                    // Handle error
+                    alert('Failed to add product to cart');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         }
     </script>
 {% endblock %}

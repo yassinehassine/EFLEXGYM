@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Votre Panier
+   
 {% endblock %}
 
 {% block panier %}
@@ -54,6 +54,8 @@
                         </table>
                     </div>
                 {% endif %}
+                 <a href="{{ path('produits') }}" class="btn btn-secondary">Retour à l'accueil</a>
+                    </div>
             </div>
         </div>
     </div>

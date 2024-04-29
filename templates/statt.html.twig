@@ -1,0 +1,21 @@
+{% extends 'back.html.twig' %}
+{% block title %}<h1>Category Statistics</h1>{% endblock %}
+{% block t %}statistique en produit type{% endblock %}
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Product Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for categoryStat in categoryStatistics %}
+            <tr>
+                <td>{{ categoryStat.category }}</td>
+                <td>{{ categoryStat.product_count }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
