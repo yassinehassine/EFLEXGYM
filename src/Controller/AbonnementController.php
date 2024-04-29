@@ -103,19 +103,47 @@ class AbonnementController extends AbstractController
     }
 
     #[Route('/monA/{user_id}', name: 'app_abonnement_monA', methods: ['GET'])]
-    public function monA(int $user_id, AbonnementRepository $abonnementRepository): Response
+    public function monA(int $user_id, AbonnementRepository $abonnementRepository, EmailSender $emailSender): Response
     {
-       
+        // Find the subscription details based on $user_id
         $abonnement = $abonnementRepository->findOneBy(['id_adherent' => $user_id]);
-    
+
         if (!$abonnement) {
             throw $this->createNotFoundException('Aucun abonnement trouvé pour cet utilisateur.');
         }
-    
-    
+
+        // Generate a unique URL (e.g., link to subscription details page)
+        $subscriptionUrl = $this->generateUrl('app_abonnement_show', ['id' => $abonnement->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        // Generate QR code with the subscription URL
+        $qrCodeUrl = $subscriptionUrl; // You can modify this if needed
+
+        // Send email with QR code to the subscriber
+        $emailSender->sendEmailWithQRCode($abonnement->getIdAdherent()->getEmail(), $qrCodeUrl);
+
+        // Render the response (you may want to customize this)
         return $this->render('abonnement/monAbonnement.html.twig', [
             'abonnement' => $abonnement,
         ]);
     }
+
+
+    #[Route('/search', name: 'app_abonnement_search', methods: ['GET'])]
+    public function search(Request $request, AbonnementRepository $abonnementRepository): Response
+    {
+        try {
+            $searchTerm = $request->query->get('search_term');
+            $abonnements = $abonnementRepository->findByNomAdherent($searchTerm);
+    
+            return $this->render('abonnement/_abonnements_list.html.twig', [
+                'abonnements' => $abonnements,
+            ]);
+        } catch (\Exception $e) {
+            // Log the error for further investigation
+            $this->getLogger()->error('Error in search method: ' . $e->getMessage());
+            throw $this->createNotFoundException('Internal Server Error');
+        }
+}
+
 
 }

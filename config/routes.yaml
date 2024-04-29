@@ -65,3 +65,8 @@ generate_pdf:
     path: '/bilan_financier/generate-pdf/{id}'
     controller: App\Controller\BilanFinancierController::generatePdf
     methods: ['GET']
+app_abonnement_search:
+    path: '/search'
+    controller: App\Controller\AbonnementController::search
+    methods: ['GET']
+

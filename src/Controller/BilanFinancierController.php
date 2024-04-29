@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-
+use Symfony\Component\HttpClient\HttpClient;
 use Psr\Log\LoggerInterface;
 use App\Entity\BilanFinancier;
 use App\service\PdfGenerator;
@@ -25,6 +25,8 @@ class BilanFinancierController extends AbstractController
 {
     private $entityManager;
     private $logger;
+    
+
 
     public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger, PdfGenerator $pdfGenerator)
     {
@@ -181,7 +183,11 @@ public function statistiques(BilanFinancierRepository $bilanFinancierRepository,
     $profits = [];
     $revenuesAbonnements = [];
     $revenuesProduits = [];
-    
+    $data = [];
+    $stockData = [];
+    $prices = [];
+  // Retrieve prices from your data source
+$volumes = []; 
     // Calculer les statistiques des profits et des revenus d'abonnements pour chaque bilan financier
     foreach ($bilanFinanciers as $bilanFinancier) {
         $dates[] = $bilanFinancier->getDateDebut()->format('Y-m-d'); // Stocker la date de début du bilan financier
@@ -196,6 +202,20 @@ public function statistiques(BilanFinancierRepository $bilanFinancierRepository,
     $nbCoachs = $userRepository->countUsersByRole('coach');
     
     // Rendre la vue avec les données des statistiques des profits et des revenus d'abonnements, ainsi que le nombre d'adhérents et de coachs
+    $httpClient = HttpClient::create();
+    $apiKey = 'JFHV1ADJHZ5E08DE';
+    $symbol = 'PTON'; // Example stock symbol (replace with your desired symbol)
+    $endpoint = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={$symbol}&interval=5min&apikey={$apiKey}";
+
+    try {
+        $response = $httpClient->request('GET', $endpoint);
+        $data = $response->toArray(); // Convert JSON response to associative array
+    } catch (TransportExceptionInterface $e) {
+        $this->logger->error('Failed to fetch data from Alpha Vantage API: ' . $e->getMessage());
+        $data = [];
+    }
+
+    // Render the view with updated data
     return $this->render('bilan_financier/stats.html.twig', [
         'dates' => json_encode($dates),
         'profits' => json_encode($profits),
@@ -203,6 +223,10 @@ public function statistiques(BilanFinancierRepository $bilanFinancierRepository,
         'revenuesProduits' => json_encode($revenuesProduits),
         'nbAdherents' => $nbAdherents,
         'nbCoachs' => $nbCoachs,
+        'data' => $data,
+        'prices' => json_encode($prices),
+        'volumes' => json_encode($volumes),
+        'stockData' => $stockData, // Pass Alpha Vantage data to the Twig template
     ]);
 }
 
