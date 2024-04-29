@@ -46,7 +46,7 @@
     </style>
 {% endblock %}
 
-{% block body %}
+{% block event %}
     <section class="team-section spad">
         <div class="container">
             <div class="row">
@@ -72,8 +72,7 @@
                                             <input type="hidden" name="_token" value="{{ csrf_token('participate' ~ evenement.id) }}">
                                             <input type="submit" class="btn btn-primary" value="Participer">
                                         </form>
-                                        <button class="btn btn-secondary details-btn" data-event-id="{{ evenement.id }}">Details</button>
-
+                                        <a href="{{ path('app_evenement_details', {'id': evenement.id}) }}" class="btn btn-secondary details-btn">Details</a>
                                     </p>
                                 </div>
                             </div>
@@ -83,68 +82,11 @@
             </div>
         </div>
     </section>
-
-    <!-- Modal for event details -->
-    <div id="eventDetailsModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Event Details</h2>
-        <div id="eventDetails"></div>
-    </div>
-</div>
-
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
-    // Get the modal
-    const modal = document.getElementById('eventDetailsModal');
-
-    // Get the <span> element that closes the modal
-    const closeBtn = document.getElementsByClassName('close')[0];
-
-    // When the user clicks the button, open the modal
-    const detailsBtns = document.querySelectorAll('.details-btn');
-    detailsBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const eventId = btn.getAttribute('data-event-id');
-            fetch('{{ path('app_evenement_details') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({ 'id': eventId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                let detailsHtml = '';
-                for (const [key, value] of Object.entries(data)) {
-                    if (key !== 'image') {
-                        detailsHtml += `<p><strong>${key}:</strong> ${value}</p>`;
-                    }
-                }
-                document.getElementById('eventDetails').innerHTML = detailsHtml;
-                modal.style.display = 'block';
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        });
-    });
-
-    // When the user clicks on <span> (x), close the modal
-    closeBtn.onclick = function() {
-        modal.style.display = 'none';
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = 'none';
-        }
-    }
-</script>
-
+        // No JavaScript needed for details button
+    </script>
 {% endblock %}

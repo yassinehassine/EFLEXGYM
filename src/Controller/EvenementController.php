@@ -1,18 +1,29 @@
 <?php
 
 namespace App\Controller;
+use Infobip\Configuration;
+
+use Infobip\Model\SmsDestination;
+use Infobip\Model\SmsTextualMessage;
+use Infobip\Model\SmsAdvancedTextualRequest;
+use Infobip\Api\SmsApi;
+use Twilio\Rest\Client;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriterer;
 use App\Entity\Participation;
 use App\Entity\User;
 use App\Entity\Evenement;
 use App\Form\EvenementType;
 use Doctrine\ORM\EntityManagerInterface;
+use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Endroid\QrCode\Color\Color;
 #[Route('/evenement')]
 class EvenementController extends AbstractController
 {
@@ -109,6 +120,7 @@ public function events(EntityManagerInterface $entityManager): Response
 
         return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
     }
+    
     #[Route('/{id}/participate', name: 'app_evenement_participate', methods: ['POST'])]
 public function participate(Request $request, Evenement $evenement, EntityManagerInterface $entityManager): Response
 {
@@ -124,29 +136,57 @@ public function participate(Request $request, Evenement $evenement, EntityManage
     $entityManager->persist($participation);
     $entityManager->flush();
 
-    // Redirect to the same page with filtered events
-    $allEvents = $entityManager
-        ->getRepository(Evenement::class)
-        ->findAll();
+   
+    $qrCodeText = "User: " . $participation->getIdUser()->getNom() . ", Event: " . $participation->getIdEvenement()->getEventName();
+    $qr_code = Qrcode::create($qrCodeText)
+                                ->setSize(600)
+                                ->setMargin(40)
+                                ->setForegroundColor(New Color(255, 128 ,0))
+                                ->setBackgroundColor(New Color (155, 204, 255));
+    $writer = new PngWriter;
+    $result = $writer->write($qr_code);
+    $response = new Response($result->getString());
+    $response->headers->set('Content-Type', $result->getMimeType());
+    $number = '+21693553223';
+    $account_id = "ACf4352a83002361ab1f50319359fa0b46";
+    $auth_token = "e504bd52f3aa2189e8eea634007d602e";
 
-    // Filter events to only include those the user hasn't participated in
-    $filteredEvents = [];
-    foreach ($allEvents as $event) {
-        $participation = $entityManager
-            ->getRepository(Participation::class)
-            ->findOneBy(['idUser' => 3, 'idEvenement' => $event]);
+    $client = new Client($account_id, $auth_token);
 
-        if (!$participation) {
-            $filteredEvents[] = $event;
-        }
-    }
+    $twilio_number = "+16812011196";
 
-    return $this->render('evenement/event.html.twig', [
-        'evenements' => $filteredEvents,
-    ]);
+    $client->messages->create(
+        $number,
+        [
+            "from" => $twilio_number,
+            "body" => $qrCodeText
+        ]
+    );
 
+
+return $response;
+    
 }
 
     
+
+#[Route('/{id}', name: 'app_evenement_details')]
+public function details(Evenement $evenement, HttpClientInterface $client): Response
+{
+    $url = 'https://api.weatherapi.com/v1/forecast.json?key=3a408b6703c94995be2184734242804&q=Paris&days=1';
+    $response = $client->request('GET', $url);
+    $weatherData = $response->toArray();
+
+    $weather = isset($weatherData['forecast']['forecastday'][0]['day']) ? $weatherData['forecast']['forecastday'][0]['day'] : null;
+
+    return $this->render('evenement/details.html.twig', [
+        'evenement' => $evenement,
+        'weather' => $weather, // Pass the weather data to the template
+    ]);
 }
+    
+}
+
+    
+
 

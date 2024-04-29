@@ -1,0 +1,74 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Ensure the blur doesn't overflow */
+    position: relative; /* Ensure the pseudo-element is positioned relative to this container */
+}
+
+.container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('{{ asset(evenement.image) }}');
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px); /* Apply the blur effect */
+    z-index: -1; /* Ensure the blur is behind the content */
+}
+
+.container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1; /* Ensure the shadow is behind the content */
+    box-shadow: inset 0 0 20px 20px rgba(0, 0, 0, 0.5); /* Add a shadow around the edges */
+}
+
+.details-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Use rgba for background color with some transparency */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    position: relative; /* Ensure the content is above the blurred image */
+    z-index: 1; /* Ensure the content is above the blurred image */
+}
+
+.event-name {
+    color: #f56c41;
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.details p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #333;
+}
+
+/* Animation */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.details-container {
+    animation: slideIn 0.5s ease-out;
+}

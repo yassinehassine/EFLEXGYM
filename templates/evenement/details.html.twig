@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Details</title>
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/details.css') }}">
+    <style>
+        .container {
+    background-image: url('{{ asset('uploads/' ~ evenement.image) }}');
+    background-size: cover;
+    background-position: center;
+    height:100vh; /* Adjust the height as needed */
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+       {# In your details.html.twig template #}
+
+<div class="details-container">
+    <h2 class="event-name">{{ evenement.eventName }}</h2>
+    <div class="details">
+        <p><strong>Start Date:</strong> {{ evenement.dateDebut|date('Y-m-d') }}</p>
+        <p><strong>End Date:</strong> {{ evenement.dateFin|date('Y-m-d') }}</p>
+        <p><strong>Duration:</strong> {{ evenement.duration }}</p>
+        <p><strong>Place:</strong> {{ evenement.place }}</p>
+
+        {# Display weather data #}
+        {% if weather %}
+            <p><strong>Weather:</strong> {{ weather.condition.text }}</p>
+            <p><strong>Average Temperature:</strong> {{ weather.avgtemp_c }}°C</p>
+            <p><strong>Humidity:</strong> {{ weather.avghumidity }}%</p>
+            {# Add more weather data as needed #}
+        {% else %}
+            <p>No weather data available.</p>
+        {% endif %}
+    </div>
+</div>
+
+    </div>
+    <script src="{{ asset('js/details.js') }}"></script>
+</body>
+</html>
