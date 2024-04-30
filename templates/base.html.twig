@@ -7,6 +7,7 @@
     <meta name="keywords" content="Gym, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    {% block title %}  <title>Gym | Template</title>  {% endblock %}
  
     <!-- Google Font -->
@@ -23,7 +24,14 @@
     <link rel="stylesheet" href="{{asset('css/magnific-popup.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     {% endblock %}
+
+  
+   
+ 
+   
+   
 </head>
 
 <body>
@@ -600,6 +608,7 @@
     <script src="{{asset('js/jquery.slicknav.js')}}"></script>
     <script src="{{asset('js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
+     <script src="{{asset('https://unpkg.com/leaflet/dist/leaflet.js')}}"></script>
 {% endblock %}
 
 
