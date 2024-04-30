@@ -1,0 +1,16 @@
+{# fitness_data.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fitness Data</title>
+</head>
+<body>
+<h1>Fitness Data</h1>
+<ul>
+    {% for exercise in fitnessData %}
+        <li>{{ exercise.name }} - {{ exercise.duration }} minutes</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
