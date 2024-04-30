@@ -21,7 +21,7 @@ class Produit
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: '')]
+    
     private ?string $image = null;
 
     #[ORM\Column(type: 'float')]
