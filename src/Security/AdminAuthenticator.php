@@ -28,18 +28,36 @@ class AdminAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->request->get('email', '');
+        // Check if the request contains an access token from Google OAuth
+        if ($request->query->has('code')) {
+            // Handle Google OAuth authentication
+            // Example: return a Passport with custom credentials
+            return new Passport(
+                new UserBadge('google'), // You can use a placeholder user identifier for Google OAuth
+                new CustomCredentials(function ($credentials) {
+                    // Here, you can perform additional logic to retrieve user information from Google using the access token
+                    // Example: $userInfo = $googleService->userinfo->get();
+                    // You can then return the user information as an array
+                    return [
+                        'email' => 'google@example.com',
+                        'roles' => ['ROLE_USER'], // Example role for Google authenticated users
+                    ];
+                })
+            );
+        } else {
+            // Handle traditional login form authentication
+            $email = $request->request->get('email', '');
+            $request->getSession()->set(Security::LAST_USERNAME, $email);
 
-        $request->getSession()->set(Security::LAST_USERNAME, $email);
-
-        return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->request->get('password', '')),
-            [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
-                new RememberMeBadge(),
-            ]
-        );
+            return new Passport(
+                new UserBadge($email),
+                new PasswordCredentials($request->request->get('password', '')),
+                [
+                    new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+                    new RememberMeBadge(),
+                ]
+            );
+        }
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

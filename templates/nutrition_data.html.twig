@@ -1,0 +1,16 @@
+{# nutrition_data.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nutrition Data</title>
+</head>
+<body>
+<h1>Nutrition Data</h1>
+<ul>
+    {% for item in nutritionData %}
+        <li>{{ item.name }} - {{ item.calories }} calories</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
