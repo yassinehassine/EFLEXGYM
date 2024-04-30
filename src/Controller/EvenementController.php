@@ -149,7 +149,7 @@ public function participate(Request $request, Evenement $evenement, EntityManage
     $response->headers->set('Content-Type', $result->getMimeType());
     $number = '+21693553223';
     $account_id = "ACf4352a83002361ab1f50319359fa0b46";
-    $auth_token = "e504bd52f3aa2189e8eea634007d602e";
+    $auth_token = "92a5d20cb9e7dac7e2e304d30e6caaf4";
 
     $client = new Client($account_id, $auth_token);
 
