@@ -1,10 +1,22 @@
-{# calanderplanning/index.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Planning Calendar{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+{% endblock %}
+
 {% block body %}
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+
+    {# Display flash messages #}
+    {% for flash_message in app.session.flashbag.get('danger') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
     <style>
         /* Custom CSS styles for the calendar */
         #calendar {
@@ -14,8 +26,9 @@
         }
     </style>
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js" integrity="sha256-i4vDW9EgtaJmeauDDymtNF2omPZ1fCKpf4w1gBlU1IE=" crossorigin="anonymous"></script>
     <div id='calendar'></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js" integrity="sha256-i4vDW9EgtaJmeauDDymtNF2omPZ1fCKpf4w1gBlU1IE=" crossorigin="anonymous"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -39,4 +52,9 @@
             calendar.render();
         });
     </script>
+
+    {# Include FlashyBundle template within a block #}
+    {% block flashy %}
+        {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
+    {% endblock %}
 {% endblock %}
