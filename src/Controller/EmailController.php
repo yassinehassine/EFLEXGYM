@@ -18,39 +18,44 @@ use App\service\EmailSender;
 use App\Entity\Abonnement;
 
 
-
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use League\OAuth2\Client\Provider\AbstractProvider;
 
 class EmailController extends AbstractController
 {
-  #[Route('/send-email', name: 'app_send_email', methods: ['POST'])]
-  public function sendEmail(Request $request, AbonnementRepository $abonnementRepository, EmailSender $emailSender): Response
-  {
-      $abonnementId = $request->request->get('abonnement_id');
-      $abonnement = $abonnementRepository->find($abonnementId);
+    #[Route('/send-email', name: 'app_send_email', methods: ['POST'])]
+    public function sendEmail(Request $request, AbonnementRepository $abonnementRepository, EmailSender $emailSender, UrlGeneratorInterface $urlGenerator): Response
+    {
+        $abonnementId = $request->request->get('abonnement_id');
+        $abonnement = $abonnementRepository->find($abonnementId);
+    
+        if (!$abonnement) {
+            throw $this->createNotFoundException('Abonnement non trouvé.');
+        }
+    
+        $adherent = $abonnement->getIdAdherent();
+    
+        if (!$adherent) {
+            throw $this->createNotFoundException('Adhérent non trouvé pour cet abonnement.');
+        }
+    
+        $adherentEmail = $adherent->getEmail();
+    
+        if (!$adherentEmail) {
+            throw $this->createNotFoundException('Adresse e-mail non trouvée pour cet adhérent.');
+        }
+    
+        // Generate the URL for the subscription details page
+        $subscriptionUrl = $urlGenerator->generate('app_abonnement_monA', ['user_id' => $adherent->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+    
+        // Send email with the subscription URL using the existing method in EmailSender
+        $emailSender->sendEmail($adherentEmail, $subscriptionUrl);
+    
+        // Redirect to the list of subscriptions after sending the email
+        return $this->redirectToRoute('app_abonnement_index');
+    }
 
-      if (!$abonnement) {
-          throw $this->createNotFoundException('Abonnement non trouvé.');
-      }
-
-      $adherent = $abonnement->getIdAdherent();
-      
-      if (!$adherent) {
-          throw $this->createNotFoundException('Adhérent non trouvé pour cet abonnement.');
-      }
-
-      $adherentEmail = $adherent->getEmail();
-
-      if (!$adherentEmail) {
-          throw $this->createNotFoundException('Adresse e-mail non trouvée pour cet adhérent.');
-      }
-
-      // Envoyer un e-mail à l'adresse de l'adhérent
-      $emailSender->sendEmail($adherentEmail);
-
-      // Redirection vers la liste des abonnements après envoi de l'e-mail
-      return $this->redirectToRoute('app_abonnement_index');
-  }
 }
+

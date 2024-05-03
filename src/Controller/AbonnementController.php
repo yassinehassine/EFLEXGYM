@@ -102,31 +102,35 @@ class AbonnementController extends AbstractController
         return $this->redirectToRoute('app_abonnement_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/monA/{user_id}', name: 'app_abonnement_monA', methods: ['GET'])]
-    public function monA(int $user_id, AbonnementRepository $abonnementRepository, EmailSender $emailSender): Response
+    #[Route('/monA', name: 'app_abonnement_monA', methods: ['GET'])]
+    public function monA(AbonnementRepository $abonnementRepository, Security $security): Response
     {
-        // Find the subscription details based on $user_id
-        $abonnement = $abonnementRepository->findOneBy(['id_adherent' => $user_id]);
+        // Get the current authenticated user
+        $user = $security->getUser();
+
+        // Ensure the user is authenticated and has the 'adherent' role
+        if (!$user || !in_array('ROLE_ADHERENT', $user->getRoles(), true)) {
+            throw $this->createAccessDeniedException('Vous devez être connecté en tant qu\'adhérent pour accéder à cette fonctionnalité.');
+        }
+
+        // Find the subscription (abonnement) for the current user
+        $abonnement = $abonnementRepository->findOneBy(['id_adherent' => $user->getId()]);
 
         if (!$abonnement) {
             throw $this->createNotFoundException('Aucun abonnement trouvé pour cet utilisateur.');
         }
 
-        // Generate a unique URL (e.g., link to subscription details page)
-        $subscriptionUrl = $this->generateUrl('app_abonnement_show', ['id' => $abonnement->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        // Generate the URL for the subscription details page
+        $subscriptionUrl = $this->generateUrl('app_abonnement_monA', ['id' => $abonnement->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        // Generate QR code with the subscription URL
-        $qrCodeUrl = $subscriptionUrl; // You can modify this if needed
-
-        // Send email with QR code to the subscriber
-        $emailSender->sendEmailWithQRCode($abonnement->getIdAdherent()->getEmail(), $qrCodeUrl);
+        // Send email with the subscription URL using the existing method in EmailSender
+        $emailSender->sendEmail($user->getEmail(), $subscriptionUrl);
 
         // Render the response (you may want to customize this)
         return $this->render('abonnement/monAbonnement.html.twig', [
             'abonnement' => $abonnement,
         ]);
     }
-
 
     #[Route('/search', name: 'app_abonnement_search', methods: ['GET'])]
     public function search(Request $request, AbonnementRepository $abonnementRepository): Response

@@ -26,7 +26,7 @@ class EmailSender
         $this->twig = $twig; // Inject Twig\Environment service
     }
 
-    public function sendEmail(string $recipientEmail): void
+    public function sendEmail(string $recipientEmail, string $subscriptionUrl): void
     {
         // Create a Transport object
         $request = $this->requestStack->getCurrentRequest();
@@ -42,7 +42,7 @@ class EmailSender
             ->subject('Votre Abonnement à E-Flex Gym')
             ->html(
                 $this->renderEmailTemplate('abonnement/email.html.twig', [
-                    // You can pass additional context here if needed
+                    'subscriptionUrl' => $subscriptionUrl,// You can pass additional context here if needed
                 ])
             );
  
@@ -60,3 +60,4 @@ class EmailSender
         return $request->getSchemeAndHttpHost() . $this->urlHelper->getAbsoluteUrl($logoPath);
     }
 }
+

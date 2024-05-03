@@ -2,6 +2,8 @@
 {% block title %}Dashboard{% endblock %}
 {% block body %}
 {% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
          <style>
          
@@ -20,11 +22,11 @@
             margin-right: 10px;
         }
 
-        .coachs-rectangle h3::before {
-            font-family: 'Font Awesome 5 Free';
-            content: '\f0c0'; /* Unicode for users icon */
-            margin-right: 10px;
-        }
+         .coachs-rectangle h3::before {
+        font-family: 'Font Awesome 5 Free'; /* Font Awesome version */
+        content: '\f3eb'; /* Unicode for the coach icon */
+        margin-right: 10px;
+    }
     </style>
 
 
@@ -36,16 +38,17 @@
          <div class="row justify-content-center"> <!-- Center the row -->
             <div class="col-md-3">
                 <div class="adherents-rectangle">
-                    <h3></h3> <!-- Leave the heading empty -->
+                    <h3>adherents</h3> <!-- Leave the heading empty -->
                     <p>{{ nbAdherents }}</p>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="coachs-rectangle">
-                    <h3></h3> <!-- Leave the heading empty -->
-                    <p>{{ nbCoachs }}</p>
-                </div>
-            </div>
+    <div class="coachs-rectangle">
+        <h3>coachs</h3> <!-- Leave the heading empty -->
+        <p>{{ nbCoachs }}</p>
+    </div>
+</div>
+
         </div>
         <div class="row">
             <div class="col-md-6">

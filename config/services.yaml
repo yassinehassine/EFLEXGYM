@@ -19,6 +19,10 @@ services:
             $urlGenerator: '@Symfony\Component\Routing\Generator\UrlGeneratorInterface'
             $defaultSalleDeSportName: 'E-Flex Gym'
 
+    App\Service\SimsimiChatbotService:
+        arguments:
+            $apiKey: '%env(rmYvYs_OFuTNeUkScviQCGlefckH1dpLtKKV4_yO)%'
+
     App\service\PdfGenerator:
         arguments:
             $pdf: '@knp_snappy.pdf'
