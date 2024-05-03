@@ -60,11 +60,12 @@ public function new(Request $request, EntityManagerInterface $entityManager ,Fla
     if ($form->isSubmitted() && $form->isValid()) {
         $entityManager->persist($reservation);
         $entityManager->flush();
+        $flashy->success('reservation avec sucss', 'http://your-awesome-link.com', [
+            'time' => 50000
+        ]);
         // Redirect to the reservation index page after successful submission
         return $this->redirectToRoute('app_calendarplanning');
-        $flashy->success('reservation avec sucss', 'http://your-awesome-link.com', [
-            'time' => 10000 // Set duration to 5000 milliseconds (5 seconds)
-        ]);
+        
     }
 
     // Render the reservation form
