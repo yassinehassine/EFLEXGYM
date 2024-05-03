@@ -8,7 +8,7 @@ app_bilan_financier_index:
     methods: GET
 
 app_abonnement_monA:
-    path: /monA/{user_id}
+    path: /monA
     controller: App\Controller\AbonnementController::monA
     methods: GET
     
