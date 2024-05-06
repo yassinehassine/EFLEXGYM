@@ -16,7 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Security;
 use Google\Client as GoogleClient;
 use GuzzleHttp\Client as GuzzleClient;
-
+use App\Form\ProfileType;
 
 
 #[Route('/profile')]
@@ -70,22 +70,26 @@ class UserController1 extends AbstractController
         ]);
     }
 
-    #[Route('/{userId}/edit', name: 'user_edit', methods: ['GET', 'POST'])]
-    public function edit2(Request $request, User $user,int $userId, EntityManagerInterface $entityManager): Response
+    #[Route('/{userId}/edit', name: 'user_edit', methods: ['GET', 'POST'])] // Defines a route for editing user profile
+    public function edit2(Request $request, int $userId, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->entityManager->getRepository(User::class)->find($userId);
+        // Fetch the user from the repository based on the user ID
+        $user = $entityManager->getRepository(User::class)->find($userId);
 
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        // Create a form for editing user profile using UserType form class
+        $form = $this->createForm(ProfileType::class, $user);
+        $form->handleRequest($request); // Handle the form submission
 
+        // Check if form is submitted and valid
         if ($form->isSubmitted() && $form->isValid()) {
-
             /** @var UploadedFile $photoFile */
             $photoFile = $form->get('photoFile')->getData();
 
+            // Check if a new photo is uploaded
             if ($photoFile) {
-                $newFilename = uniqid().'.'.$photoFile->guessExtension();
+                $newFilename = uniqid().'.'.$photoFile->guessExtension(); // Generate a unique filename
 
+                // Move the uploaded file to the specified directory
                 try {
                     $photoFile->move(
                         $this->getParameter('photos_directory'), // Define this parameter in services.yaml
@@ -95,12 +99,10 @@ class UserController1 extends AbstractController
                     // Handle file upload error...
                 }
 
-                $user->setPhoto($newFilename);
+                $user->setPhoto($newFilename); // Set the new photo filename in the user entity
             }
 
-
-
-
+            // Hash the password using the injected passwordHasher
             $user->setPassword(
                 $this->passwordHasher->hashPassword(
                     $user,
@@ -108,23 +110,19 @@ class UserController1 extends AbstractController
                 )
             );
 
-            $entityManager->flush();
+            $entityManager->flush(); // Save the changes to the database
 
-            return $this->redirectToRoute('profile_user_show', [], Response::HTTP_SEE_OTHER);
+            // Redirect to the user profile page after editing
+            return $this->redirectToRoute('profile_user_show', ['userId' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
+        // Render the edit profile form
         return $this->renderForm('editprofile.html.twig', [
-            'user' => $user,
-            'form' => $form,
+            'user' => $user, // Pass the user entity to the view
+            'form' => $form, // Pass the form to the view
         ]);
     }
 
-
-
-
-
+        
 
 }
-
-
-
