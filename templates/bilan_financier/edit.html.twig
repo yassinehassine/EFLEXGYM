@@ -55,21 +55,7 @@
             });
     }
 
-    function obtenirSalairesCoachs() {
-        fetch("{{ path('app_bilan_financier_get_salaires_coachs', {'id': bilan_financier.id}) }}")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('salairesCoachsSpan').innerText = "Salaires Coachs: " + data.salairesCoachs;
-            })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des salaires des coachs:', error);
-            });
-    }
+   
 
     function calculerProfit() {
         fetch("{{ path('app_bilan_financier_calculer_profit', {'id': bilan_financier.id}) }}")

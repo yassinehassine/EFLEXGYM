@@ -39,6 +39,35 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function calculateSalairesCoachs(BilanFinancier $bilanFinancier): ?float
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            'SELECT SUM(u.salaire) AS salaires
+            FROM App\Entity\User u
+            WHERE u.idBilanFinancier = :id'
+        )->setParameters([ 'id' => $bilanFinancier->getId()]);
+    
+        $result = $query->getSingleScalarResult();
+    
+        return $result ? (float) $result : null;
+    }
+    
+    public function countUsersByRole(string $role): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u)')
+            ->andWhere('u.role = :role')
+            ->setParameter('role', $role)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    
+        
+    
+       
+    
+    
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
@@ -63,4 +92,5 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
 }

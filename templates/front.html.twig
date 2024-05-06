@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{asset('css/slicknav.min.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('css/style.css')}}" type="text/css">
         <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        
     {% endblock %}
 </head>
 
@@ -96,12 +97,22 @@
                             <li><a href="{{ path('app_calendarplanning') }}">Planning</a></li>
                              <li><a href="{{ path('app_evenement_events') }}">Evenements</a></li>
                              <li><a href="{{ path('produits') }}">Shop</a></li>
-                            <li> <a href="#">  {% if app.user %} Logged in as {{ app.user.userIdentifier }}<a/>
-                                     <ul class="dropdown">
-                                         <li><a href="{{ path('profile_user_show', {'userId': app.user.id}) }}">Profile </a></li>
-                                         <li> <a href="{{ path('app_logout') }}">Logout{% endif %}</a></li>
-                                     </ul>
-                                </a></li>
+                           <li>
+    {% if app.user %}
+        <a href="#">
+            Logged in as {{ app.user.userIdentifier }}
+            <ul class="dropdown">
+                <li><a href="{{ path('profile_user_show', {'userId': app.user.id}) }}">Profile</a></li>
+                <li><a href="{{ path('app_logout') }}">Logout</a></li>
+            </ul>
+        </a>
+    {% else %}
+        <a href="{{ path('app_login') }}">Login</a>
+    {% endif %}
+</li>
+                              
+                                   
+                            
 
 
 

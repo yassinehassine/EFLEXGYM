@@ -22,7 +22,7 @@
                     <td>{{ abonnement.dateDebut ? abonnement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ abonnement.dateFin ? abonnement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ abonnement.etat }}</td>
-                    <td>{{ abonnement.idAdherent.nom }}</td> 
+                    <td>{{ abonnement.id.name }}</td> 
                     <td>{{ abonnement.idBilanFinancier.id }}</td> 
                     <td>
                         <a href="{{ path('app_abonnement_show', {'id': abonnement.id}) }}"><i class="fas fa-eye"></i></a>

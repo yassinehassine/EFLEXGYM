@@ -44,7 +44,7 @@ class AbonnementType extends AbstractType
             ])
             ->add('idAdherent', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'nom', 
+                'choice_label' => 'name', 
             ])
             ->add('idBilanFinancier', EntityType::class, [
                 'class' => BilanFinancier::class,

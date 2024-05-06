@@ -137,7 +137,7 @@ public function getRevenusProduits(int $id, ProduitRepository $produitRepository
     
     return $this->json(['revenusProduits' => $revenusProduits]);
 }
-
+/* 
 #[Route('/get-salaires-coachs/{id}', name: 'app_bilan_financier_get_salaires_coachs', methods: ['GET'])]
 public function getSalairesCoachs(int $id, UserRepository $userRepository): JsonResponse
 {
@@ -145,33 +145,32 @@ public function getSalairesCoachs(int $id, UserRepository $userRepository): Json
     $salairesCoachs = $userRepository->calculateSalairesCoachs($bilanFinancier);
     
     return $this->json(['salairesCoachs' => $salairesCoachs]);
-}
+} */
 
 
 
 #[Route('/calculer-profit/{id}', name: 'app_bilan_financier_calculer_profit', methods: ['GET'])]
 public function calculerProfit(int $id, BilanFinancierRepository $bilanFinancierRepository, AbonnementRepository $abonnementRepository, ProduitRepository $produitRepository, UserRepository $userRepository): JsonResponse
 {
-    $bilanFinancier = $bilanFinancierRepository->find($id);
     
-    $revenusAbonnements = $abonnementRepository->calculateRevenusAbonnements($bilanFinancier);
-    $revenusProduits = $produitRepository->calculateRevenusProduits($bilanFinancier);
-    $salairesCoachs = $userRepository->calculateSalairesCoachs($bilanFinancier);
-    
+    {
+        $bilanFinancier = $bilanFinancierRepository->find($id);
+        
+        $revenusAbonnements = $abonnementRepository->calculateRevenusAbonnements($bilanFinancier);
+        $revenusProduits = $produitRepository->calculateRevenusProduits($bilanFinancier);
+        
+        // Calculate the turnover (chiffre d'affaires) by adding the revenues from subscriptions and products
+        $profit = $revenusAbonnements + $revenusProduits;
+        
+        // Update the 'profit' property of the BilanFinancier entity
+        $bilanFinancier->setprofit($profit);
+        
+        // Persist the changes to the database
+        $this->entityManager->flush();
 
-    $bilanFinancier->setRevenusAbonnements($revenusAbonnements);
-    $bilanFinancier->setRevenusProduits($revenusProduits);
-    $bilanFinancier->setSalairesCoachs($salairesCoachs);
-  
-    $profit = $revenusAbonnements + $revenusProduits - $salairesCoachs - ($bilanFinancier->getDepenses() ?? 0) - ($bilanFinancier->getPrixLocation() ?? 0);
-    $bilanFinancier->setProfit($profit);
-    
-    
-    $this->entityManager->flush();
-
-    return $this->json(['profit' => $profit]);
+        return $this->json(['profit' => $profit]);
+    }
 }
-
 #[Route('/statistique', name: 'stat', methods: ['GET', 'POST'])]
 public function statistiques(BilanFinancierRepository $bilanFinancierRepository, AbonnementRepository $abonnementRepository, ProduitRepository $produitRepository, UserRepository $userRepository)
 {
@@ -199,6 +198,7 @@ $volumes = [];
     
     // Récupérer le nombre d'adhérents et de coachs dans la base de données
     $nbAdherents = $userRepository->countUsersByRole('adherent');
+    
     $nbCoachs = $userRepository->countUsersByRole('coach');
     
     // Rendre la vue avec les données des statistiques des profits et des revenus d'abonnements, ainsi que le nombre d'adhérents et de coachs

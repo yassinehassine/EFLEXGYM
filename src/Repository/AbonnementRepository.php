@@ -47,9 +47,9 @@ public function findByType($type)
 public function findByNomAdherent($nom): array
 {
     return $this->createQueryBuilder('a')
-        ->join('a.id_adherent', 'u')
-        ->andWhere('u.nom LIKE :nom')
-        ->setParameter('nom', '%'.$nom.'%')
+        ->join('a.id', 'u')
+        ->andWhere('u.name LIKE :name')
+        ->setParameter('name', '%'.$nom.'%')
         ->getQuery()
         ->getResult();
 }

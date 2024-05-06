@@ -73,9 +73,9 @@
                             <p class="card-text">{{ produit.description }}</p>
                             <p class="card-text">Price: ${{ produit.prix }}</p>
                             {% if produit.getId() in existingArticles %}
-                                <button type="button" class="btn btn-success" onclick="addToCart({{ produit.getId() }})">deja exist </button>
+                                <button type="button" class="btn btn-success" onclick="{{ app.user ? 'addToCart(' ~ produit.getId() ~ ')' : 'window.location.href=\'' ~ path('app_login') ~ '\'' }}" data-product-id="{{ produit.getId() }}">deja exist </button>
                             {% else %}
-                                <button type="button" class="btn btn-primary" onclick="addToCart({{ produit.getId() }})">ajouter au panier</button>
+                                <button type="button" class="btn btn-primary" onclick="{{ app.user ? 'addToCart(' ~ produit.getId() ~ ')' : 'window.location.href=\'' ~ path('app_login') ~ '\'' }}" data-product-id="{{ produit.getId() }}">ajouter au panier</button>
                             {% endif %}
                         </div>
                     </div>
