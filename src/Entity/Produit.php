@@ -44,8 +44,9 @@ class Produit
     #[Assert\NotBlank(message: '')]
     private ?Categorie $categorie = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $id_bilan_financier = null;
+    #[ORM\ManyToOne(targetEntity: BilanFinancier::class, inversedBy: 'produits')]
+    #[ORM\JoinColumn(name: 'id_bilan_financier', referencedColumnName: 'id')]
+    private ?BilanFinancier $idBilanFinancier = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $id_admin = null;

@@ -3,64 +3,107 @@
 namespace App\Controller;
 
 use App\Service\panierService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use App\Repository\PanierRepository;
 use App\Repository\ProduitRepository;
 use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\Security;
 
 class PanierController extends AbstractController
 {
+    private $passwordHasher;
+    private $security;
+    private $entityManager;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher, Security $security, EntityManagerInterface $entityManager)
+    {
+        $this->passwordHasher = $passwordHasher;
+        $this->security = $security;
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('/panier', name: 'app_panier')]
     public function index(panierService $panierService, UserRepository $userRep, Request $request): Response
     {
-        // Manually fetch a user by ID
-        $id_user = 3; // Replace with the ID of the static user
-        //  $connectedUser = $userRep->find($id_user);
+        // Get the currently logged-in user
+        $user = $this->getUser();
 
-        // Fetch panier items for the static user
-        $panierData = $panierService->getCartItems($id_user);
-        $panierItemsCount = count($panierData);
+        // Check if a user is logged in
+        if ($user) {
+            $id_user = $user->getId();
 
-        // Calculate total price of items in the panier
-        $totalPrice = array_reduce($panierData, function ($total, $product) {
-            return $total + $product->getIdProduit()->getPrix();
-        }, 0);
+            // Fetch panier items for the dynamic user
+            $panierData = $panierService->getCartItems($id_user);
+            $panierItemsCount = count($panierData);
 
-        // Render the panier.html.twig template with necessary data
-        return $this->render('panier/panier.html.twig', [
-            'controller_name' => 'PanierController',
-            'panierData' => $panierData,
-            'totalPrice' => $totalPrice,
-            'panierItemsCount' => $panierItemsCount,
-        ]);
+            // Calculate total price of items in the panier
+            $totalPrice = array_reduce($panierData, function ($total, $product) {
+                return $total + $product->getIdProduit()->getPrix();
+            }, 0);
+
+            // Render the panier.html.twig template with necessary data
+            return $this->render('panier/panier.html.twig', [
+                'controller_name' => 'PanierController',
+                'panierData' => $panierData,
+                'totalPrice' => $totalPrice,
+                'panierItemsCount' => $panierItemsCount,
+            ]);
+        } else {
+            // Handle the case where no user is logged in
+            // For example, redirect to app_login page or display an error message
+            return $this->redirectToRoute('app_login'); // Redirect to app_login page
+        }
     }
 
     #[Route('/addToPanier/{idp}', name: 'app_addToPanier')]
     public function addToPanier(Request $request, $idp, panierService $panierService, UserRepository $userRep, ProduitRepository $pr): Response
     {
-        // Manually fetch a user by ID
-        $id_user = 3; // Replace with the ID of the static user
-        // $connectedUser = $userRep->find($id_user);
+        // Get the currently logged-in user
+        $user = $this->getUser();
 
-        $panierService->addToCart($id_user, $idp, $userRep, $pr);
+        // Check if a user is logged in
+        if ($user) {
+            $id_user = $user->getId();
 
-        // Add flash message
-        $this->addFlash('command_ajoute', 'Article ajouté au panier');
+            // Add the item to the cart for the dynamic user
+            $panierService->addToCart($id_user, $idp, $userRep, $pr);
 
-        return $this->redirectToRoute('produits');
+            // Add flash message
+            $this->addFlash('command_ajoute', 'Article ajouté au panier');
+
+            return $this->redirectToRoute('produits');
+        } else {
+            // Handle the case where no user is logged in
+            // For example, redirect to app_login page or display an error message
+            return $this->redirectToRoute('app_login'); // Redirect to app_login page
+        }
     }
 
     #[Route('/removeFromPanier/{idp}', name: 'app_removeFromPanier')]
     public function removeFromPanier($idp, panierService $panierService, PanierRepository $panierRep): Response
     {
-        // Remove the selected article from the user's panier
-        $panierService->removeFromCart($idp, $panierRep);
+        // Get the currently logged-in user
+        $user = $this->getUser();
 
-        // Redirect back to the panier page
-        return $this->redirectToRoute('app_panier');
+        // Check if a user is logged in
+        if ($user) {
+            $id_user = $user->getId();
+
+            // Remove the selected article from the user's panier
+            $panierService->removeFromCart($idp, $panierRep);
+
+            // Redirect back to the panier page
+            return $this->redirectToRoute('app_panier');
+        } else {
+            // Handle the case where no user is logged in
+            // For example, redirect to app_login page or display an error message
+            return $this->redirectToRoute('app_login'); // Redirect to app_login page
+        }
     }
 }

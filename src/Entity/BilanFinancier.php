@@ -18,16 +18,20 @@ class BilanFinancier
     #[ORM\Column(type:"datetime")]
     private ?\DateTimeInterface $dateDebut=null;
 
-    #[ORM\Column(type:"datetime")]
+    #[ORM\Column(type: "datetime")]
+    #[Assert\Expression(
+        "this.getDateFin() > this.getDateDebut()",
+        message:"La date de fin doit être postérieure à la date de début."
+    )]
     private ?\DateTimeInterface $dateFin=null;
 
     #[ORM\Column]
-
     private ?float $salairesCoachs=null;
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Assert\PositiveOrZero]
+    #[Assert\Positive]
+    #[Assert\GreaterThan(value: 0, message: 'Le prix doit être un nombre strictement supérieur à zéro.')]
     private ?float $prixLocation=null;
 
     #[ORM\Column]
@@ -38,7 +42,8 @@ class BilanFinancier
 
     #[ORM\Column]
     #[Assert\NotBlank]
-    #[Assert\PositiveOrZero]
+    #[Assert\Positive]
+    #[Assert\GreaterThan(value: 0, message: 'Le prix doit être un nombre strictement supérieur à zéro.')]
     private ?float $depenses=null;
 
     #[ORM\Column]
@@ -56,10 +61,10 @@ class BilanFinancier
 }
 
 
-    public function getDateDebut(): ?\DateTimeInterface
-    {
-        return $this->dateDebut;
-    }
+public function getDateDebut(): ?\DateTimeInterface
+{
+    return $this->dateDebut;
+}
 
     public function setDateDebut(\DateTimeInterface $dateDebut): static
     {
@@ -162,3 +167,4 @@ class BilanFinancier
     
     
 }
+
