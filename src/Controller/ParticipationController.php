@@ -33,7 +33,7 @@ class ParticipationController extends AbstractController
         $participation->setNbrDeParticipant($event->getNbrDeParticipant() + 1);
 
         $form = $this->createFormBuilder($participation)
-            ->add('user', HiddenType::class, ['data' => 3]) // Static user ID
+            ->add('user', HiddenType::class, ['data' => $user]) // Static user ID
             ->add('event', HiddenType::class, ['data' => $eventId])
             ->add('nbrDeParticipant', HiddenType::class, ['data' => $event->getNbrDeParticipant() + 1])
             ->add('save', SubmitType::class, ['label' => 'Participate'])

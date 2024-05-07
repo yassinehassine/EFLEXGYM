@@ -24,9 +24,19 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Endroid\QrCode\Color\Color;
+use Symfony\Component\Security\Core\Security; // 
 #[Route('/evenement')]
 class EvenementController extends AbstractController
 {
+
+    private $security; // Declare Security class property
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+
     #[Route('/new', name: 'app_evenement_new', methods: ['GET', 'POST'])]
 public function new(Request $request, EntityManagerInterface $entityManager): Response
 {
@@ -125,16 +135,24 @@ public function events(EntityManagerInterface $entityManager): Response
 public function participate(Request $request, Evenement $evenement, EntityManagerInterface $entityManager): Response
 {
     // Create a new participation for the user with ID 3 and the specified event
-    $participation = new Participation();
-    $participation->setIdUser($entityManager->getReference(User::class, 4)); // Set user ID statically to 3
-    $participation->setIdEvenement($evenement);
+    $user = $this->security->getUser();
 
-    // Increment the number of participants by 1 for the event
-    $nbrDeParticipant = $participation->getNbrDeParticipant() + 1;
-    $participation->setNbrDeParticipant($nbrDeParticipant);
+        // Make sure the user is logged in
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
 
-    $entityManager->persist($participation);
-    $entityManager->flush();
+        // Create a new participation for the logged-in user and the specified event
+        $participation = new Participation();
+        $participation->setIdUser($user);
+        $participation->setIdEvenement($evenement);
+
+        // Increment the number of participants by 1 for the event
+        $nbrDeParticipant = $participation->getNbrDeParticipant() + 1;
+        $participation->setNbrDeParticipant($nbrDeParticipant);
+
+        $entityManager->persist($participation);
+        $entityManager->flush();
 
    
     $qrCodeText = "User: " . $participation->getIdUser()->getName() . ", Event: " . $participation->getIdEvenement()->getEventName();
