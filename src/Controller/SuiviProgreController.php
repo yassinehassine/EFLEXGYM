@@ -123,7 +123,8 @@ class SuiviProgreController extends AbstractController
             'suivi_progres' => $suiviProgreRepository->findAll(),
         ]);
     }
-
+// here in this route you need to pass the user to the field idUser using
+    // $suiviProgre-setIduser($connectedUser);
     #[Route('/new', name: 'app_suivi_progre_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -132,6 +133,7 @@ class SuiviProgreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // $suiviProgre-setIduser($connectedUser);
             $entityManager->persist($suiviProgre);
             $entityManager->flush();
 
