@@ -28,7 +28,7 @@ class SuiviProgreType extends AbstractType
                 'multiple' => false,
                 'required' => true,
             ])
-            ->add('iduser');
+           
     }
 
     public function configureOptions(OptionsResolver $resolver): void
